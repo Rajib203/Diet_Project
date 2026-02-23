@@ -1,0 +1,235 @@
+<!-- templates/index.html (FULL) — Premium High-Visibility Dashboard + Recommended Foods -->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Diet Prediction Dashboard</title>
+
+  <!-- Bootstrap -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+
+  <!-- Your CSS -->
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+
+<body class="app-body">
+
+  <!-- Topbar -->
+  <header class="app-topbar">
+    <div class="container-fluid px-3 px-lg-4 py-3 d-flex align-items-center justify-content-between gap-3">
+      <div class="d-flex align-items-center gap-3">
+        <div class="logo-badge">🥗</div>
+        <div>
+          <div class="topbar-title">Diet Prediction Dashboard</div>
+          <div class="topbar-subtitle">Prediction + BMI + Foods to Eat</div>
+        </div>
+      </div>
+
+      <div class="acc-box">
+        <div class="acc-label">Model Accuracy</div>
+        <div class="acc-value">
+          {% if accuracy is not none %}
+            {{ (accuracy * 100) | round(2) }}%
+          {% else %}
+            --
+          {% endif %}
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main class="container-fluid px-3 px-lg-4 my-4">
+    <div class="row g-4">
+
+      <!-- LEFT: Form -->
+      <div class="col-12 col-xl-4">
+        <div class="card card-white h-100">
+          <div class="card-body p-4">
+            <div class="d-flex align-items-center justify-content-between mb-3">
+              <h2 class="card-title-strong mb-0">Enter Details</h2>
+              <span class="chip">BMI Auto</span>
+            </div>
+
+            <form method="POST" class="row g-3">
+              <div class="col-12 col-md-6 col-xl-12">
+                <label class="form-label strong">Age</label>
+                <input name="age" type="number" class="form-control form-control-lg input-solid" required min="1" max="120" placeholder="e.g. 24">
+              </div>
+
+              <div class="col-12 col-md-6 col-xl-12">
+                <label class="form-label strong">Gender</label>
+                <select name="gender" class="form-select form-select-lg input-solid" required>
+                  <option value="" selected disabled>Select</option>
+                  <option>Male</option>
+                  <option>Female</option>
+                  <option>Other</option>
+                </select>
+              </div>
+
+              <div class="col-12 col-md-6 col-xl-12">
+                <label class="form-label strong">Height (cm)</label>
+                <input name="height" type="number" step="0.1" class="form-control form-control-lg input-solid" required min="50" max="250" placeholder="e.g. 172">
+              </div>
+
+              <div class="col-12 col-md-6 col-xl-12">
+                <label class="form-label strong">Weight (kg)</label>
+                <input name="weight" type="number" step="0.1" class="form-control form-control-lg input-solid" required min="10" max="300" placeholder="e.g. 68">
+              </div>
+
+              <div class="col-12">
+                <label class="form-label strong">Activity Level</label>
+                <select name="activity" class="form-select form-select-lg input-solid" required>
+                  <option value="" selected disabled>Select</option>
+                  <option>Sedentary</option>
+                  <option>Light</option>
+                  <option>Moderate</option>
+                  <option>Active</option>
+                  <option>Very Active</option>
+                </select>
+              </div>
+
+              <div class="col-12">
+                <label class="form-label strong">Goal</label>
+                <select name="goal" class="form-select form-select-lg input-solid" required>
+                  <option value="" selected disabled>Select</option>
+                  <option>Weight Loss</option>
+                  <option>Maintain</option>
+                  <option>Muscle Gain</option>
+                </select>
+              </div>
+
+              <div class="col-12">
+                <label class="form-label strong">Region</label>
+                <select name="region" class="form-select form-select-lg input-solid" required>
+                  <option value="" selected disabled>Select</option>
+                  <option>North India</option>
+                  <option>South India</option>
+                  <option>East India</option>
+                  <option>West India</option>
+                  <option>Central India</option>
+                </select>
+              </div>
+
+              <div class="col-12 pt-1">
+                <button class="btn btn-lg w-100 btn-primary-strong" type="submit">
+                  Predict Diet
+                </button>
+                <div class="helper-text mt-2">
+                  BMI is calculated automatically using height & weight.
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+
+      <!-- RIGHT: Results -->
+      <div class="col-12 col-xl-8">
+        <div class="row g-4">
+
+          <!-- KPI CARDS -->
+          <div class="col-12 col-md-4">
+            <div class="card kpi-card">
+              <div class="card-body p-4">
+                <div class="kpi-label">Status</div>
+                <div class="kpi-value">{% if prediction %}Ready{% else %}Waiting{% endif %}</div>
+                <div class="kpi-sub">{% if prediction %}Prediction generated{% else %}Submit form to predict{% endif %}</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-12 col-md-4">
+            <div class="card kpi-card">
+              <div class="card-body p-4">
+                <div class="kpi-label">BMI Category</div>
+                <div class="kpi-value">
+                  {% if bmi_category %}
+                    <span class="badge-pill badge-{{ bmi_category|lower }}">{{ bmi_category }}</span>
+                  {% else %}
+                    --
+                  {% endif %}
+                </div>
+                <div class="kpi-sub">Based on your inputs</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-12 col-md-4">
+            <div class="card kpi-card">
+              <div class="card-body p-4">
+                <div class="kpi-label">Accuracy</div>
+                <div class="kpi-value">
+                  {% if accuracy is not none %}
+                    {{ (accuracy * 100) | round(2) }}%
+                  {% else %}
+                    --
+                  {% endif %}
+                </div>
+                <div class="kpi-sub">Latest trained model</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Main Result Panel -->
+          <div class="col-12">
+            <div class="card card-white">
+              <div class="card-body p-4 p-lg-5">
+                <div class="d-flex align-items-center justify-content-between mb-3">
+                  <h2 class="card-title-strong mb-0">Prediction Result</h2>
+                  <span class="chip chip-dark">Dashboard</span>
+                </div>
+
+                {% if prediction %}
+                  <div class="result-banner">
+                    <div class="result-label">Predicted Diet Type</div>
+                    <div class="result-value">{{ prediction }}</div>
+                  </div>
+
+                  <!-- ✅ Recommended Foods -->
+                  <div class="mt-4">
+                    <div class="section-mini-title">Recommended Foods (What to Eat)</div>
+                    <div class="food-grid">
+                      {% for food in foods %}
+                        <div class="food-card">🍽️ {{ food }}</div>
+                      {% endfor %}
+                    </div>
+                    <div class="helper-text mt-2">
+                      This list is based on your predicted diet type.
+                    </div>
+                  </div>
+
+                  {% if chart_path %}
+                    <div class="mt-4">
+                      <div class="section-mini-title">BMI Health Chart</div>
+                      <div class="chart-frame">
+                        <img src="{{ url_for('static', filename='bmi_chart.png') }}" alt="BMI Chart" class="img-fluid">
+                      </div>
+                      <div class="helper-text mt-2">
+                        Reference lines: 18.5 (Underweight), 25 (Normal), 30 (Obese).
+                      </div>
+                    </div>
+                  {% endif %}
+
+                {% else %}
+                  <div class="empty-box">
+                    <div class="empty-emoji">🍽️</div>
+                    <div class="empty-title">Nothing to show yet</div>
+                    <div class="empty-sub">Fill the form and click <b>Predict Diet</b>.</div>
+                  </div>
+                {% endif %}
+
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+    </div>
+  </main>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

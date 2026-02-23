@@ -1,0 +1,274 @@
+/* static/style.css (FULL) — Premium High-Visibility + Food Cards */
+
+:root{
+  --bg: #0b1220;
+  --bg2:#0f172a;
+
+  --white:#ffffff;
+  --text:#0b1220;
+  --card:#ffffff;
+  --cardBorder:#e5e7eb;
+
+  --primary:#2563eb;
+  --primaryDark:#1d4ed8;
+
+  --shadow: 0 18px 60px rgba(2, 6, 23, 0.35);
+}
+
+.app-body{
+  min-height:100vh;
+  background:
+    radial-gradient(900px 500px at 10% 10%, rgba(37,99,235,0.30), transparent 55%),
+    radial-gradient(900px 500px at 90% 15%, rgba(16,185,129,0.18), transparent 55%),
+    linear-gradient(180deg, var(--bg), var(--bg2));
+  color: var(--white);
+  font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+}
+
+/* Topbar */
+.app-topbar{
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  background: rgba(2, 6, 23, 0.82);
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid rgba(255,255,255,0.12);
+}
+
+.logo-badge{
+  width: 46px;
+  height: 46px;
+  border-radius: 14px;
+  display:grid;
+  place-items:center;
+  background: rgba(255,255,255,0.12);
+  border: 1px solid rgba(255,255,255,0.18);
+  font-size: 20px;
+}
+
+.topbar-title{
+  font-weight: 900;
+  letter-spacing: 0.2px;
+  font-size: 18px;
+  line-height: 1.1;
+  color: #fff;
+}
+
+.topbar-subtitle{
+  font-size: 12px;
+  color: rgba(255,255,255,0.72);
+}
+
+.acc-box{
+  min-width: 180px;
+  padding: 10px 12px;
+  border-radius: 14px;
+  background: rgba(255,255,255,0.12);
+  border: 1px solid rgba(255,255,255,0.18);
+}
+
+.acc-label{
+  font-size: 12px;
+  font-weight: 700;
+  color: rgba(255,255,255,0.75);
+}
+
+.acc-value{
+  font-size: 20px;
+  font-weight: 900;
+  color: #fff;
+}
+
+/* Cards */
+.card-white{
+  background: var(--card) !important;
+  border: 1px solid var(--cardBorder) !important;
+  border-radius: 18px !important;
+  box-shadow: var(--shadow);
+  color: var(--text);
+}
+
+.kpi-card{
+  background: rgba(255,255,255,0.12);
+  border: 1px solid rgba(255,255,255,0.18);
+  border-radius: 18px;
+  box-shadow: 0 14px 46px rgba(2,6,23,0.35);
+  color: #fff;
+}
+
+.kpi-label{
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 0.3px;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.75);
+}
+
+.kpi-value{
+  font-size: 22px;
+  font-weight: 950;
+  margin-top: 4px;
+  color: #fff;
+}
+
+.kpi-sub{
+  font-size: 12px;
+  color: rgba(255,255,255,0.72);
+  margin-top: 2px;
+}
+
+/* Titles */
+.card-title-strong{
+  font-size: 16px;
+  font-weight: 900;
+  color: #0b1220;
+}
+
+.section-mini-title{
+  font-weight: 900;
+  color: #0b1220;
+  margin-bottom: 10px;
+}
+
+/* Inputs */
+.form-label.strong{
+  font-weight: 800;
+  color: #0b1220;
+}
+
+.input-solid{
+  background: #f8fafc !important;
+  border: 1px solid #e2e8f0 !important;
+  color: #0b1220 !important;
+  border-radius: 14px !important;
+}
+
+.input-solid::placeholder{
+  color: #94a3b8;
+}
+
+.input-solid:focus{
+  border-color: rgba(37,99,235,0.55) !important;
+  box-shadow: 0 0 0 4px rgba(37,99,235,0.18) !important;
+}
+
+/* Buttons */
+.btn-primary-strong{
+  background: var(--primary) !important;
+  border: 0 !important;
+  border-radius: 14px !important;
+  font-weight: 900 !important;
+  padding: 12px 14px !important;
+}
+
+.btn-primary-strong:hover{
+  background: var(--primaryDark) !important;
+}
+
+/* Chips */
+.chip{
+  padding: 7px 10px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 900;
+  background: rgba(37,99,235,0.12);
+  color: #1d4ed8;
+  border: 1px solid rgba(37,99,235,0.25);
+}
+
+.chip-dark{
+  background: rgba(2,6,23,0.06);
+  color: #0b1220;
+  border: 1px solid #e2e8f0;
+}
+
+/* Result */
+.result-banner{
+  padding: 16px;
+  border-radius: 16px;
+  background: linear-gradient(135deg, rgba(37,99,235,0.12), rgba(16,185,129,0.10));
+  border: 1px solid rgba(2,6,23,0.08);
+}
+
+.result-label{
+  font-size: 12px;
+  font-weight: 900;
+  letter-spacing: 0.3px;
+  text-transform: uppercase;
+  color: #334155;
+}
+
+.result-value{
+  font-size: clamp(20px, 2vw, 28px);
+  font-weight: 1000;
+  color: #0b1220;
+  margin-top: 4px;
+}
+
+/* Chart frame */
+.chart-frame{
+  background: #fff;
+  border: 1px solid #e2e8f0;
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 10px 26px rgba(2,6,23,0.10);
+}
+
+.helper-text{
+  font-size: 12px;
+  color: #64748b;
+}
+
+/* Empty */
+.empty-box{
+  padding: 28px;
+  border-radius: 16px;
+  background: #f8fafc;
+  border: 1px dashed #cbd5e1;
+  text-align: center;
+}
+
+.empty-emoji{ font-size: 40px; }
+.empty-title{
+  font-weight: 1000;
+  font-size: 18px;
+  margin-top: 6px;
+  color: #0b1220;
+}
+.empty-sub{
+  color: #475569;
+  margin-top: 2px;
+}
+
+/* BMI Badges */
+.badge-pill{
+  display:inline-block;
+  padding: 7px 12px;
+  border-radius: 999px;
+  font-weight: 900;
+  font-size: 12px;
+  border: 1px solid rgba(2,6,23,0.08);
+}
+
+.badge-underweight{ background: rgba(59,130,246,0.12); color:#1d4ed8; }
+.badge-normal{ background: rgba(16,185,129,0.12); color:#047857; }
+.badge-overweight{ background: rgba(245,158,11,0.14); color:#92400e; }
+.badge-obese{ background: rgba(239,68,68,0.12); color:#991b1b; }
+
+/* ✅ Food Cards */
+.food-grid{
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 12px;
+}
+
+.food-card{
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 14px;
+  padding: 10px 12px;
+  font-weight: 800;
+  color: #0b1220;
+  text-align: center;
+  box-shadow: 0 8px 18px rgba(2,6,23,0.06);
+}
