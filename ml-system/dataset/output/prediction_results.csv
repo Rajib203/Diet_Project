@@ -330,7 +330,7 @@ Gender,Age,Height,Weight,family_history_with_overweight,FAVC,FCVC,NCP,CAEC,SMOKE
 1,19.0,1.74,74.0,1,0,3.0,1.0,2,0,3.0,0,3.0,1.0,2,4,24.441802087462015,Normal Weight,2220.0,2.59,Balanced Diet,Mixed Exercise
 0,19.0,1.65,82.0,1,1,3.0,3.0,2,0,1.0,0,0.0,1.0,2,3,30.119375573921033,Overweight Level I,2460.0,2.87,Low Carb Diet,Cardio + Walking
 0,17.0,1.8,50.0,0,1,3.0,4.0,1,0,1.0,0,2.0,1.0,2,3,15.432098765432098,Insufficient Weight,1500.0,1.75,High Protein Diet,Strength Training
-1,17.0,1.74,56.0,1,1,2.0,3.0,2,0,2.0,0,2.0,1.0,3,3,18.49649887699828,Insufficient Weight,1680.0,1.96,High Protein Diet,Strength Training
+1,17.0,1.74,56.0,1,1,2.0,3.0,2,0,2.0,0,2.0,1.0,3,3,18.49649887699828,Normal Weight,1680.0,1.96,Balanced Diet,Mixed Exercise
 1,27.0,1.85,75.0,1,1,2.0,1.0,2,0,2.0,0,1.0,0.0,3,4,21.913805697589478,Normal Weight,2250.0,2.63,Balanced Diet,Mixed Exercise
 0,23.0,1.7,56.0,0,0,3.0,4.0,0,0,3.0,1,3.0,0.0,3,0,19.377162629757787,Normal Weight,1680.0,1.96,Balanced Diet,Mixed Exercise
 0,18.0,1.45,53.0,0,1,2.0,3.0,1,0,2.0,1,1.0,2.0,1,3,25.20808561236623,Obesity Type II,1590.0,1.86,Medical Weight Loss Diet,Cardio + Walking
@@ -548,7 +548,7 @@ Gender,Age,Height,Weight,family_history_with_overweight,FAVC,FCVC,NCP,CAEC,SMOKE
 0,19.058511,1.662017,49.838965,0,1,1.4925,3.0,2,0,1.049134,0,2.0,1.0,2,3,18.042557227370896,Insufficient Weight,1495.16895,1.74,High Protein Diet,Strength Training
 0,18.827008,1.7,50.0,0,1,1.0,3.240578,2,0,1.0,0,2.0,1.0,2,3,17.301038062283737,Insufficient Weight,1500.0,1.75,High Protein Diet,Strength Training
 0,19.314964,1.661403,49.932199,0,1,2.205439,3.0,2,0,1.530531,0,2.0,1.0,2,3,18.089672818885816,Insufficient Weight,1497.96597,1.75,High Protein Diet,Strength Training
-0,29.970445,1.610863,49.516027,1,1,2.059138,3.904858,1,0,2.0,0,0.821977,0.0,3,3,19.08220593702959,Normal Weight,1485.48081,1.73,Balanced Diet,Mixed Exercise
+0,29.970445,1.610863,49.516027,1,1,2.059138,3.904858,1,0,2.0,0,0.821977,0.0,3,3,19.08220593702959,Insufficient Weight,1485.48081,1.73,High Protein Diet,Strength Training
 0,32.383858,1.640688,46.655622,1,1,3.0,3.11158,1,0,2.721769,0,1.44287,0.0,3,3,17.332131697748757,Insufficient Weight,1399.66866,1.63,High Protein Diet,Strength Training
 0,24.163526,1.64603,49.839685,1,1,3.0,3.590039,1,0,2.7305,0,0.107078,0.0,3,3,18.395000174666684,Insufficient Weight,1495.19055,1.74,High Protein Diet,Strength Training
 1,17.038222,1.710564,51.588874,0,1,2.0,2.057935,2,0,2.371015,0,0.288032,0.714627,2,3,17.631018184497087,Insufficient Weight,1547.6662199999998,1.81,High Protein Diet,Strength Training

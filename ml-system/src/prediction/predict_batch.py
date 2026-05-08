@@ -7,7 +7,7 @@ from sklearn.preprocessing import LabelEncoder
 # ==========================================
 
 model = joblib.load(
-    "saved_models/model.pkl"
+    "saved_models/best_model.pkl"
 )
 
 # ==========================================
@@ -29,9 +29,6 @@ if 'NObeyesdad' in df.columns:
 # CREATE BMI COLUMN
 # ==========================================
 
-# BMI Formula:
-# BMI = Weight / Height^2
-
 df['BMI'] = df['Weight'] / (df['Height'] ** 2)
 
 # ==========================================
@@ -41,7 +38,7 @@ df['BMI'] = df['Weight'] / (df['Height'] ** 2)
 encoder = LabelEncoder()
 
 categorical_cols = df.select_dtypes(
-    include=['object']
+    include=['object', 'string']
 ).columns
 
 for col in categorical_cols:
@@ -82,7 +79,9 @@ df['Prediction'] = decoded_predictions
 # DAILY CALORIE ESTIMATION
 # ==========================================
 
-df['Daily_Calories'] = df['Weight'] * 30
+df['Daily_Calories'] = (
+    df['Weight'] * 30
+)
 
 # ==========================================
 # WATER INTAKE ESTIMATION
