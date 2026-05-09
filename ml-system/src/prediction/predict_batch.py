@@ -70,6 +70,16 @@ decoded_predictions = [
 ]
 
 # ==========================================
+# USER GOAL
+# ==========================================
+
+goal = "Weight Loss"
+
+# Other options:
+# goal = "Weight Gain"
+# goal = "Maintain Weight"
+
+# ==========================================
 # ADD PREDICTION COLUMN
 # ==========================================
 
@@ -99,26 +109,63 @@ diet_list = []
 
 for prediction in decoded_predictions:
 
-    if prediction == "Insufficient Weight":
-        diet_list.append("High Protein Diet")
+    # ======================================
+    # WEIGHT LOSS
+    # ======================================
 
-    elif prediction == "Normal Weight":
-        diet_list.append("Balanced Diet")
+    if goal == "Weight Loss":
 
-    elif prediction == "Overweight Level I":
-        diet_list.append("Low Carb Diet")
+        if prediction in [
+            "Overweight Level I",
+            "Overweight Level II",
+            "Obesity Type I",
+            "Obesity Type II",
+            "Obesity Type III"
+        ]:
 
-    elif prediction == "Overweight Level II":
-        diet_list.append("Low Fat Diet")
+            diet_list.append(
+                "Strict Low Carb Fat Loss Diet"
+            )
 
-    elif prediction == "Obesity Type I":
-        diet_list.append("Strict Fat Reduction Diet")
+        elif prediction == "Normal Weight":
 
-    elif prediction == "Obesity Type II":
-        diet_list.append("Medical Weight Loss Diet")
+            diet_list.append(
+                "Balanced Low Calorie Diet"
+            )
+
+        else:
+
+            diet_list.append(
+                "Healthy Weight Management Diet"
+            )
+
+    # ======================================
+    # WEIGHT GAIN
+    # ======================================
+
+    elif goal == "Weight Gain":
+
+        if prediction == "Insufficient Weight":
+
+            diet_list.append(
+                "High Protein Muscle Gain Diet"
+            )
+
+        else:
+
+            diet_list.append(
+                "Healthy High Calorie Diet"
+            )
+
+    # ======================================
+    # MAINTAIN WEIGHT
+    # ======================================
 
     else:
-        diet_list.append("Doctor Supervised Diet")
+
+        diet_list.append(
+            "Balanced Maintenance Diet"
+        )
 
 df['Recommended_Diet'] = diet_list
 
@@ -130,14 +177,57 @@ workout_list = []
 
 for prediction in decoded_predictions:
 
-    if prediction == "Insufficient Weight":
-        workout_list.append("Strength Training")
+    # ======================================
+    # WEIGHT LOSS
+    # ======================================
 
-    elif prediction == "Normal Weight":
-        workout_list.append("Mixed Exercise")
+    if goal == "Weight Loss":
+
+        if prediction in [
+            "Overweight Level I",
+            "Overweight Level II",
+            "Obesity Type I",
+            "Obesity Type II",
+            "Obesity Type III"
+        ]:
+
+            workout_list.append(
+                "Cardio + HIIT + Walking"
+            )
+
+        else:
+
+            workout_list.append(
+                "Light Cardio + Yoga"
+            )
+
+    # ======================================
+    # WEIGHT GAIN
+    # ======================================
+
+    elif goal == "Weight Gain":
+
+        if prediction == "Insufficient Weight":
+
+            workout_list.append(
+                "Strength Training + Gym"
+            )
+
+        else:
+
+            workout_list.append(
+                "Muscle Building Workout"
+            )
+
+    # ======================================
+    # MAINTAIN WEIGHT
+    # ======================================
 
     else:
-        workout_list.append("Cardio + Walking")
+
+        workout_list.append(
+            "Mixed Exercise Routine"
+        )
 
 df['Workout_Suggestion'] = workout_list
 
@@ -149,31 +239,70 @@ meal_plan_list = []
 
 for prediction in decoded_predictions:
 
-    if prediction == "Insufficient Weight":
+    # ======================================
+    # WEIGHT LOSS
+    # ======================================
 
-        meal_plan_list.append(
-            "Breakfast: Eggs & Milk | "
-            "Lunch: Rice & Chicken | "
-            "Dinner: Paneer & Roti"
-        )
+    if goal == "Weight Loss":
 
-    elif prediction == "Normal Weight":
+        if prediction in [
+            "Overweight Level I",
+            "Overweight Level II",
+            "Obesity Type I",
+            "Obesity Type II",
+            "Obesity Type III"
+        ]:
 
-        meal_plan_list.append(
-            "Breakfast: Oats & Fruits | "
-            "Lunch: Rice, Dal & Salad | "
-            "Dinner: Soup & Vegetables"
-        )
+            meal_plan_list.append(
+                "Breakfast: Oats & Green Tea | "
+                "Lunch: Salad & Grilled Chicken | "
+                "Dinner: Soup & Vegetables"
+            )
+
+        else:
+
+            meal_plan_list.append(
+                "Breakfast: Fruits & Oats | "
+                "Lunch: Rice & Dal | "
+                "Dinner: Light Soup"
+            )
+
+    # ======================================
+    # WEIGHT GAIN
+    # ======================================
+
+    elif goal == "Weight Gain":
+
+        if prediction == "Insufficient Weight":
+
+            meal_plan_list.append(
+                "Breakfast: Eggs & Milk | "
+                "Lunch: Rice & Chicken | "
+                "Dinner: Paneer & Roti"
+            )
+
+        else:
+
+            meal_plan_list.append(
+                "Breakfast: Banana Shake | "
+                "Lunch: Protein Rice Bowl | "
+                "Dinner: Chicken & Vegetables"
+            )
+
+    # ======================================
+    # MAINTAIN WEIGHT
+    # ======================================
 
     else:
 
         meal_plan_list.append(
-            "Breakfast: Green Tea & Oats | "
-            "Lunch: Salad & Grilled Chicken | "
-            "Dinner: Soup & Vegetables"
+            "Breakfast: Fruits & Oats | "
+            "Lunch: Balanced Meal | "
+            "Dinner: Light Healthy Dinner"
         )
 
 df['Meal_Plan'] = meal_plan_list
+
 # ==========================================
 # SAVE OUTPUT CSV
 # ==========================================
