@@ -142,6 +142,39 @@ for prediction in decoded_predictions:
 df['Workout_Suggestion'] = workout_list
 
 # ==========================================
+# MEAL PLAN
+# ==========================================
+
+meal_plan_list = []
+
+for prediction in decoded_predictions:
+
+    if prediction == "Insufficient Weight":
+
+        meal_plan_list.append(
+            "Breakfast: Eggs & Milk | "
+            "Lunch: Rice & Chicken | "
+            "Dinner: Paneer & Roti"
+        )
+
+    elif prediction == "Normal Weight":
+
+        meal_plan_list.append(
+            "Breakfast: Oats & Fruits | "
+            "Lunch: Rice, Dal & Salad | "
+            "Dinner: Soup & Vegetables"
+        )
+
+    else:
+
+        meal_plan_list.append(
+            "Breakfast: Green Tea & Oats | "
+            "Lunch: Salad & Grilled Chicken | "
+            "Dinner: Soup & Vegetables"
+        )
+
+df['Meal_Plan'] = meal_plan_list
+# ==========================================
 # SAVE OUTPUT CSV
 # ==========================================
 
