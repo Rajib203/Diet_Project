@@ -3,9 +3,20 @@ import joblib
 
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import LabelEncoder
-from sklearn.metrics import accuracy_score
 
-# Models
+from sklearn.metrics import (
+    accuracy_score,
+    precision_score,
+    recall_score,
+    f1_score,
+    confusion_matrix,
+    classification_report
+)
+
+# ==========================================
+# MODELS
+# ==========================================
+
 from sklearn.linear_model import LogisticRegression
 from sklearn.ensemble import RandomForestClassifier
 
@@ -26,11 +37,14 @@ print("\nDataset Loaded Successfully")
 encoder = LabelEncoder()
 
 categorical_cols = df.select_dtypes(
-    include=['object']
+    include=['object', 'string']
 ).columns
 
 for col in categorical_cols:
-    df[col] = encoder.fit_transform(df[col])
+
+    df[col] = encoder.fit_transform(
+        df[col]
+    )
 
 print("\nCategorical Data Encoded")
 
@@ -38,7 +52,10 @@ print("\nCategorical Data Encoded")
 # FEATURES & TARGET
 # ==========================================
 
-X = df.drop('NObeyesdad', axis=1)
+X = df.drop(
+    'NObeyesdad',
+    axis=1
+)
 
 y = df['NObeyesdad']
 
@@ -62,6 +79,7 @@ print("\nTrain Test Split Completed")
 models = {
 
     "Logistic Regression":
+
     LogisticRegression(
         max_iter=200,
         C=0.2,
@@ -69,6 +87,7 @@ models = {
     ),
 
     "Random Forest":
+
     RandomForestClassifier(
         n_estimators=25,
         max_depth=5,
@@ -77,6 +96,7 @@ models = {
         random_state=42
     )
 }
+
 # ==========================================
 # TRAINING & EVALUATION
 # ==========================================
@@ -87,17 +107,31 @@ best_model_name = ""
 
 for name, model in models.items():
 
-    print(f"\n============================")
+    print("\n============================")
     print(f"Training {name}...")
     print("============================")
 
-    # Train model
-    model.fit(X_train, y_train)
+    # ======================================
+    # TRAIN MODEL
+    # ======================================
 
-    # Predict
-    predictions = model.predict(X_test)
+    model.fit(
+        X_train,
+        y_train
+    )
 
-    # Accuracy
+    # ======================================
+    # PREDICT
+    # ======================================
+
+    predictions = model.predict(
+        X_test
+    )
+
+    # ======================================
+    # ACCURACY
+    # ======================================
+
     accuracy = accuracy_score(
         y_test,
         predictions
@@ -109,11 +143,85 @@ for name, model in models.items():
     )
 
     print(
-        f"{name} Accuracy: "
+        f"\n{name} Accuracy: "
         f"{accuracy_percent}%"
     )
 
-    # Save best model
+    # ======================================
+    # PRECISION
+    # ======================================
+
+    precision = precision_score(
+        y_test,
+        predictions,
+        average='weighted'
+    )
+
+    print(
+        f"Precision: "
+        f"{round(precision, 2)}"
+    )
+
+    # ======================================
+    # RECALL
+    # ======================================
+
+    recall = recall_score(
+        y_test,
+        predictions,
+        average='weighted'
+    )
+
+    print(
+        f"Recall: "
+        f"{round(recall, 2)}"
+    )
+
+    # ======================================
+    # F1 SCORE
+    # ======================================
+
+    f1 = f1_score(
+        y_test,
+        predictions,
+        average='weighted'
+    )
+
+    print(
+        f"F1 Score: "
+        f"{round(f1, 2)}"
+    )
+
+    # ======================================
+    # CONFUSION MATRIX
+    # ======================================
+
+    cm = confusion_matrix(
+        y_test,
+        predictions
+    )
+
+    print("\nConfusion Matrix:\n")
+
+    print(cm)
+
+    # ======================================
+    # CLASSIFICATION REPORT
+    # ======================================
+
+    print("\nClassification Report:\n")
+
+    print(
+        classification_report(
+            y_test,
+            predictions
+        )
+    )
+
+    # ======================================
+    # SAVE BEST MODEL
+    # ======================================
+
     if accuracy > best_accuracy:
 
         best_accuracy = accuracy
@@ -135,7 +243,10 @@ joblib.dump(
 
 print("\n===================================")
 
-print(f"Best Model: {best_model_name}")
+print(
+    f"Best Model: "
+    f"{best_model_name}"
+)
 
 print(
     f"Best Accuracy: "
