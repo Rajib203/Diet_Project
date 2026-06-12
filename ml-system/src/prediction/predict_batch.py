@@ -45,10 +45,17 @@ for col in categorical_cols:
     df[col] = encoder.fit_transform(df[col])
 
 # ==========================================
+# SCALE DATA
+# ==========================================
+
+scaler = joblib.load("saved_models/scaler.pkl")
+X_scaled = scaler.transform(df)
+
+# ==========================================
 # PREDICT HEALTH CATEGORY
 # ==========================================
 
-predictions = model.predict(df)
+predictions = model.predict(X_scaled)
 
 # ==========================================
 # DECODE PREDICTIONS

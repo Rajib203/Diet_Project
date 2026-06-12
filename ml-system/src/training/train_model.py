@@ -2,8 +2,7 @@ import pandas as pd
 import joblib
 
 from sklearn.model_selection import train_test_split
-from sklearn.preprocessing import LabelEncoder
-
+from sklearn.preprocessing import LabelEncoder, StandardScaler
 from sklearn.metrics import (
     accuracy_score,
     precision_score,
@@ -73,6 +72,16 @@ X_train, X_test, y_train, y_test = train_test_split(
 print("\nTrain Test Split Completed")
 
 # ==========================================
+# SCALE DATA
+# ==========================================
+
+scaler = StandardScaler()
+X_train = scaler.fit_transform(X_train)
+X_test = scaler.transform(X_test)
+
+print("\nData Scaled using StandardScaler")
+
+# ==========================================
 # MODEL DICTIONARY
 # ==========================================
 
@@ -81,7 +90,7 @@ models = {
     "Logistic Regression":
 
     LogisticRegression(
-        max_iter=200,
+        max_iter=1000,
         C=0.2,
         solver='lbfgs'
     ),
@@ -229,12 +238,17 @@ for name, model in models.items():
         best_model_name = name
 
 # ==========================================
-# SAVE BEST MODEL
+# SAVE BEST MODEL & SCALER
 # ==========================================
 
 joblib.dump(
     best_model,
     "saved_models/best_model.pkl"
+)
+
+joblib.dump(
+    scaler,
+    "saved_models/scaler.pkl"
 )
 
 # ==========================================
