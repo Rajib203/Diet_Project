@@ -8,7 +8,7 @@ if defined _OLD_CODEPAGE (
     "%SystemRoot%\System32\chcp.com" 65001 > nul
 )
 
-set VIRTUAL_ENV=C:\VIRAS\OneDrive\Desktop\Diet_Project\venv
+set VIRTUAL_ENV=R:\Diet_Project\venv
 
 if not defined PROMPT set PROMPT=$P$G
 
