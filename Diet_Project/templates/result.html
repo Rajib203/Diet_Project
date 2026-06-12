@@ -1,0 +1,175 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container" style="padding-top: 3rem;">
+    
+    <!-- Health Results -->
+    <div class="results-header">
+        <h2 style="color: var(--secondary); display: inline-block; border-bottom: 3px solid var(--primary); padding-bottom: 0.5rem;">Your Health Results</h2>
+    </div>
+    
+    <div class="metrics-grid">
+        <div class="metric-card bmi">
+            <div class="metric-label">BMI</div>
+            <div class="metric-value" style="color: var(--secondary);">{{ data.bmi }}</div>
+            <div class="metric-label">{% if data.bmi < 18.5 %}Underweight{% elif data.bmi < 25 %}Normal{% elif data.bmi < 30 %}Overweight{% else %}Obese{% endif %}</div>
+        </div>
+        <div class="metric-card calories">
+            <div class="metric-label">Calories</div>
+            <div class="metric-value" style="color: var(--primary);">{{ data.calories }}</div>
+            <div class="metric-label">kcal/day</div>
+        </div>
+       
+        <div class="metric-card" style="border-color: {% if data.disease_risk == 'High' %}var(--danger){% else %}var(--secondary){% endif %};">
+            <div class="metric-label">Disease Risk</div>
+            <div class="metric-value" style="color: {% if data.disease_risk == 'High' %}var(--danger){% else %}var(--secondary){% endif %};">{{ data.disease_risk }}</div>
+            <div class="metric-label">Risk</div>
+        </div>
+    </div>
+      <!-- Nutrition Dashboard Charts -->
+    <div class="results-header" style="margin-top: 4rem;">
+        <h2 style="color: #EC4899; display: inline-block; border-bottom: 3px solid #EC4899; padding-bottom: 0.5rem;">Your Nutrition Dashboard</h2>
+    </div>
+
+    <div class="card" style="margin-bottom: 4rem;">
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1.5rem;">
+            <div>
+                <h3 style="text-align: center; font-size: 1rem; color: var(--text-muted);">Calorie Distribution</h3>
+                <canvas id="macroPieChart"></canvas>
+            </div>
+            <div>
+                <h3 style="text-align: center; font-size: 1rem; color: var(--text-muted);">Nutrient Intake (g)</h3>
+                <canvas id="macroBarChart"></canvas>
+                 <ul style="list-style: none; padding: 0; margin-top: 1rem;">
+                    <li><span style="color: #EF4444;">●</span> Protein: {{ data.protein }} g</li>
+                    <li><span style="color: #F59E0B;">●</span> Carbs: {{ data.carbs }} g</li>
+                    <li><span style="color: #8B5CF6;">●</span> Fat: {{ data.fat }} g</li>
+                </ul>
+            </div>
+            <div>
+                <h3 style="text-align: center; font-size: 1rem; color: var(--text-muted);">Water Intake (L)</h3>
+                <div style="font-size: 1.5rem; color: var(--primary); text-align: center; margin-top: 1rem;">{{ water_intake }}</div>
+                 <canvas id="waterChart"></canvas>
+            </div>
+        </div>
+    </div>
+
+    <!-- Personalized Diet Plan -->
+    <div class="results-header" style="margin-top: 4rem;">
+        <h2 style="color: #F59E0B; display: inline-block; border-bottom: 3px solid var(--secondary); padding-bottom: 0.5rem;">Your Personalized Diet Plan</h2>
+    </div>
+
+    <div class="diet-plan-grid">
+        <div class="meal-card" style="border-top: 4px solid #F59E0B;">
+            <div class="meal-title">☀️ Breakfast</div>
+            <ul class="meal-list">
+                {% for item in diet_plan.Breakfast %}
+                <li>• {{ item }}</li>
+                {% endfor %}
+            </ul>
+        </div>
+        <div class="meal-card" style="border-top: 4px solid #F59E0B;">
+            <div class="meal-title">🌤️ Lunch</div>
+            <ul class="meal-list">
+                {% for item in diet_plan.Lunch %}
+                <li>• {{ item }}</li>
+                {% endfor %}
+            </ul>
+        </div>
+        <div class="meal-card" style="border-top: 4px solid #4F46E5;">
+            <div class="meal-title">🌙 Dinner</div>
+            <ul class="meal-list">
+                {% for item in diet_plan.Dinner %}
+                <li>• {{ item }}</li>
+                {% endfor %}
+            </ul>
+        </div>
+        <div class="meal-card" style="border-top: 4px solid var(--secondary);">
+            <div class="meal-title">💡 Additional Tips</div>
+            <ul class="meal-list">
+                {% for item in diet_plan.Tips %}
+                <li>• {{ item }}</li>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+
+  
+
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+    const protein = {{ data.protein }};
+    const carbs = {{ data.carbs }};
+    const fat = {{ data.fat }};
+    
+    // Pie Chart
+    const ctxPie = document.getElementById('macroPieChart').getContext('2d');
+    new Chart(ctxPie, {
+        type: 'doughnut',
+        data: {
+            labels: ['Protein', 'Carbs', 'Fat'],
+            datasets: [{
+                data: [protein * 4, carbs * 4, fat * 9], // calories from macros
+                backgroundColor: ['#EF4444', '#F59E0B', '#8B5CF6'],
+                borderWidth: 0
+            }]
+        },
+        options: {
+            responsive: true,
+            plugins: {
+                legend: { position: 'bottom' }
+            }
+        }
+    });
+
+    // Bar Chart
+    const ctxBar = document.getElementById('macroBarChart').getContext('2d');
+    new Chart(ctxBar, {
+        type: 'bar',
+        data: {
+            labels: ['Protein', 'Carbs', 'Fat'],
+            datasets: [{
+                label: 'Grams',
+                data: [protein, carbs, fat],
+                backgroundColor: ['#EF4444', '#F59E0B', '#8B5CF6'],
+                borderRadius: 4
+            }]
+        },
+        options: {
+            responsive: true,
+            plugins: {
+                legend: { display: false }
+            },
+            scales: {
+                y: { beginAtZero: true }
+            }
+        }
+    });
+
+    // Water Chart
+    const waterIntake = {{ water_intake|default:0 }};
+    const ctxWater = document.getElementById('waterChart').getContext('2d');
+    new Chart(ctxWater, {
+        type: 'doughnut',
+        data: {
+            labels: ['Intake', 'Remaining'],
+            datasets: [{
+                data: [waterIntake, Math.max(4 - waterIntake, 0)],
+                backgroundColor: ['#3B82F6', '#E5E7EB'],
+                borderWidth: 0
+            }]
+        },
+        options: {
+            responsive: true,
+            plugins: {
+                legend: { display: false }
+            },
+            cutout: '75%'
+        }
+    });
+</script>
+{% endblock %}

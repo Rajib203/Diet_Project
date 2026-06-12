@@ -1,0 +1,19 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<section class="hero">
+    <div class="hero-content">
+        <h1>Diet & Nutrition<br>Recommendation System</h1>
+        <p>Get personalized diet and nutrition recommendations based on your health data using Machine Learning.</p>
+        <div>
+            <a href="{% url 'prediction' %}" class="btn btn-primary" style="margin-right: 1rem;">Get Prediction</a>
+            <a href="{% url 'dashboard' %}" class="btn btn-secondary">View Dashboard</a>
+        </div>
+    </div>
+    <div class="hero-image">
+        <!-- Using a placeholder related to health/food -->
+        <img src="https://images.unsplash.com/photo-1490645935967-10de6ba17061?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="Healthy Food Bowl">
+    </div>
+</section>
+{% endblock %}

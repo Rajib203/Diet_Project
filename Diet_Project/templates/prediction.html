@@ -1,0 +1,65 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container" style="padding-top: 4rem;">
+    <div class="card" style="max-width: 800px; margin: 0 auto;">
+        <h2 style="text-align: center; color: var(--secondary); margin-bottom: 2rem;">Enter Your Health Information</h2>
+        
+        <form method="POST">
+            {% csrf_token %}
+            {% if form.errors %}
+                <div style="color: red; margin-bottom: 1rem; text-align: center;">
+                    {{ form.errors }}
+                </div>
+            {% endif %}
+            <div class="form-row">
+                <div class="form-group">
+                    <label class="form-label" for="{{ form.name.id_for_label }}">Name</label>
+                    {{ form.name }}
+                </div>
+                <div class="form-group">
+                    <label class="form-label" for="{{ form.age.id_for_label }}">Age</label>
+                    {{ form.age }}
+                </div>
+            </div>
+            
+            <div class="form-row">
+                <div class="form-group">
+                    <label class="form-label" for="{{ form.height.id_for_label }}">Height (cm)</label>
+                    {{ form.height }}
+                </div>
+                <div class="form-group">
+                    <label class="form-label" for="{{ form.weight.id_for_label }}">Weight (kg)</label>
+                    {{ form.weight }}
+                </div>
+            </div>
+            
+            <div class="form-row">
+                <div class="form-group">
+                    <label class="form-label" for="{{ form.gender.id_for_label }}">Gender</label>
+                    {{ form.gender }}
+                </div>
+                <div class="form-group">
+                    <label class="form-label" for="{{ form.activity_level.id_for_label }}">Activity Level</label>
+                    {{ form.activity_level }}
+                </div>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label class="form-label" for="{{ form.goal.id_for_label }}">Goal</label>
+                    {{ form.goal }}
+                </div>
+                <div class="form-group">
+                    <label class="form-label" for="{{ form.medical_condition.id_for_label }}">Medical Condition</label>
+                    {{ form.medical_condition }}
+                </div>
+            </div>
+            
+            <div style="text-align: center; margin-top: 2rem;">
+                <button type="submit" class="btn btn-primary" style="background-color: var(--secondary); width: 100%; max-width: 300px; font-size: 1.1rem; padding: 0.75rem;">Predict My Results</button>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

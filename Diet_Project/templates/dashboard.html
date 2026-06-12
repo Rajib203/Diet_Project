@@ -1,0 +1,41 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container" style="padding-top: 3rem;">
+    <h2 style="color: var(--primary); margin-bottom: 2rem;">Your Dashboard</h2>
+    
+    <div class="card">
+        <h3>History</h3>
+        {% if history %}
+            <table style="width: 100%; text-align: left; border-collapse: collapse; margin-top: 1rem;">
+                <thead>
+                    <tr style="border-bottom: 2px solid #E5E7EB;">
+                        <th style="padding: 1rem;">Date</th>
+                        <th style="padding: 1rem;">Goal</th>
+                        <th style="padding: 1rem;">BMI</th>
+                        <th style="padding: 1rem;">Calories</th>
+                        <th style="padding: 1rem;">Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for item in history %}
+                    <tr style="border-bottom: 1px solid #E5E7EB;">
+                        <td style="padding: 1rem;">{{ item.created_at|date:"M d, Y" }}</td>
+                        <td style="padding: 1rem;">{{ item.goal }}</td>
+                        <td style="padding: 1rem;">{{ item.bmi }}</td>
+                        <td style="padding: 1rem;">{{ item.calories }}</td>
+                        <td style="padding: 1rem; display: flex; gap: 0.5rem;">
+                            <a href="{% url 'inputs' item.pk %}" class="btn btn-secondary" style="padding: 0.25rem 0.75rem; font-size: 0.875rem;">Inputs</a>
+                            <a href="{% url 'result' item.pk %}" class="btn btn-primary" style="padding: 0.25rem 0.75rem; font-size: 0.875rem;">Results</a>
+                            <a href="{% url 'delete_prediction' item.pk %}" class="btn btn-secondary" style="padding: 0.25rem 0.75rem; font-size: 0.875rem; border-color: var(--danger); color: var(--danger);" onclick="return confirm('Are you sure you want to delete this record?');">Delete</a>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        {% else %}
+            <p style="color: var(--text-muted); margin-top: 1rem;">No history found. <a href="{% url 'prediction' %}" style="color: var(--primary);">Get your first prediction!</a></p>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}
