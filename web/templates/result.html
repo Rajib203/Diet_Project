@@ -47,9 +47,9 @@
                 </ul>
             </div>
             <div>
-                <h3 style="text-align: center; font-size: 1rem; color: var(--text-muted);">Water Intake (L)</h3>
-                <div style="font-size: 1.5rem; color: var(--primary); text-align: center; margin-top: 1rem;">{{ water_intake }}</div>
-                 <canvas id="waterChart"></canvas>
+                <h3 style="text-align: center; font-size: 1rem; color: var(--text-muted);">Daily Water Intake</h3>
+                <canvas id="waterChart"></canvas>
+                 <p style="text-align: center; margin-top: 1rem; color: var(--text-muted);">{{ water_intake|default:0 }} L / 4 L</
             </div>
         </div>
     </div>
@@ -93,9 +93,6 @@
             </ul>
         </div>
     </div>
-
-  
-
 </div>
 {% endblock %}
 
