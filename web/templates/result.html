@@ -1,97 +1,307 @@
 {% extends 'base.html' %}
+{% load static %}
+
+{% block head %}
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+<link rel="stylesheet" href="{% static 'css/result.css' %}">
+{% endblock %}
 
 {% block content %}
-<div class="container" style="padding-top: 3rem;">
+<div class="dashboard-container">
     
-    <!-- Health Results -->
-    <div class="results-header">
-        <h2 style="color: var(--secondary); display: inline-block; border-bottom: 3px solid var(--primary); padding-bottom: 0.5rem;">Your Health Results</h2>
-    </div>
-    
-    <div class="metrics-grid">
-        <div class="metric-card bmi">
-            <div class="metric-label">BMI</div>
-            <div class="metric-value" style="color: var(--secondary);">{{ data.bmi }}</div>
-            <div class="metric-label">{% if data.bmi < 18.5 %}Underweight{% elif data.bmi < 25 %}Normal{% elif data.bmi < 30 %}Overweight{% else %}Obese{% endif %}</div>
+    <div class="dashboard-header">
+        
+        <div class="header-title">
+            <h1>Your Prediction Result</h1>
+            <p>Based on the information you provided</p>
         </div>
-        <div class="metric-card calories">
-            <div class="metric-label">Calories</div>
-            <div class="metric-value" style="color: var(--primary);">{{ data.calories }}</div>
-            <div class="metric-label">kcal/day</div>
-        </div>
-       
-        <div class="metric-card" style="border-color: {% if data.disease_risk == 'High' %}var(--danger){% else %}var(--secondary){% endif %};">
-            <div class="metric-label">Disease Risk</div>
-            <div class="metric-value" style="color: {% if data.disease_risk == 'High' %}var(--danger){% else %}var(--secondary){% endif %};">{{ data.disease_risk }}</div>
-            <div class="metric-label">Risk</div>
-        </div>
-    </div>
-      <!-- Nutrition Dashboard Charts -->
-    <div class="results-header" style="margin-top: 4rem;">
-        <h2 style="color: #EC4899; display: inline-block; border-bottom: 3px solid #EC4899; padding-bottom: 0.5rem;">Your Nutrition Dashboard</h2>
     </div>
 
-    <div class="card" style="margin-bottom: 4rem;">
-        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1.5rem;">
-            <div>
-                <h3 style="text-align: center; font-size: 1rem; color: var(--text-muted);">Calorie Distribution</h3>
-                <canvas id="macroPieChart"></canvas>
+    <!-- Row 1 -->
+         <!-- Metric Cards -->
+    <div class="grid-row-1">
+        <div class="card metric-card">
+            <div class="card-title" style="justify-content: center;">Obesity Prediction</div>
+            <div class="metric-icon obesity-icon">
+                <i class='bx bx-check-shield'></i>
             </div>
-            <div>
-                <h3 style="text-align: center; font-size: 1rem; color: var(--text-muted);">Nutrient Intake (g)</h3>
-                <canvas id="macroBarChart"></canvas>
-                 
+            <div class="metric-value">{{ data.disease_risk | default:'--' }}</div>
+            <div class="metric-subtitle">&nbsp;</div>
+            <div class="badge {% if data.disease_risk == 'High' %}badge-warning{% else %}badge-success{% endif %}">
+                {% if data.disease_risk == 'High' %}High Risk{% else %}Healthy Status{% endif %}
             </div>
-             <div style="display: flex; flex-direction: column; align-items: center; position: relative;">
-                <h3 style="text-align: center; font-size: 1rem; color: var(--text-muted); margin-bottom: 1rem;">Daily Water Intake</h3>
-                <div style="position: relative; width: 100%; max-width: 180px; margin: 0 auto;">
-                    <canvas id="waterChart"></canvas>
-                    <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); font-size: 1.5rem; font-weight: 700; color: #3B82F6; text-align: center; line-height: 1.2;">
-                        {{ water_intake }}<br>
-                        <span style="font-size: 0.875rem; color: var(--text-muted); font-weight: 500;">Liters</span>
+        </div>
+        <!-- BMI Card -->
+        <div class="card metric-card">
+            <div class="card-title" style="justify-content: center;">BMI (Calculated)</div>
+            <div class="metric-icon bmi-icon">
+                <i class='bx bx-child'></i>
+            </div>
+            <div class="metric-value">{{ data.bmi | default:'--' }}</div>
+            <div class="metric-subtitle">&nbsp;</div>
+            <div class="badge badge-primary">
+                {% if data.bmi < 18.5 %}Underweight{% elif data.bmi < 25 %}Normal{% elif data.bmi < 30 %}Overweight{% else %}Obese{% endif %}
+            </div>
+        </div>
+        <!-- Daily Calorie Needs Card -->
+        <div class="card metric-card">
+            <div class="card-title" style="justify-content: center;">Daily Calorie Needs</div>
+            <div class="metric-icon calorie-icon">
+                <i class='bx bxs-hot'></i>
+            </div>
+            <div class="metric-value">{{ data.calories | default:'--' }}</div>
+            <div class="metric-subtitle">kcal/day</div>
+            <div class="badge badge-warning">Recommended</div>
+        </div>
+        <!-- Health Status Card -->
+        <div class="card metric-card">
+            <div class="card-title" style="justify-content: center;">Health Status</div>
+            <div class="metric-icon health-icon">
+                <i class='bx bx-pulse'></i>
+            </div>
+            <div class="metric-value">{{ health_status }}</div>
+            <div class="metric-subtitle">&nbsp;</div>
+            <div class="badge badge-{{ health_status_color }}">Based on Risk</div>
+        </div>
+    </div>
+
+    <!-- Row 2 -->
+    <!-- BMI Classification -->
+    <div class="grid-row-2">
+        <div class="card">
+            <div class="card-title"><i class='bx bx-shield-alt-2' style="color: var(--color-success)"></i> BMI Classification</div>
+            
+            <div class="bmi-bar-container">
+                <i class='bx bxs-down-arrow bmi-indicator' id="bmiIndicator" style="left: 0%;"></i>
+                <div class="bmi-bar">
+                    <div class="bmi-segment underweight"></div>
+                    <div class="bmi-segment normal"></div>
+                    <div class="bmi-segment overweight"></div>
+                    <div class="bmi-segment obese"></div>
+                </div>
+                <div class="bmi-labels">
+                    <span>Underweight</span>
+                    <span>Normal</span>
+                    <span>Overweight</span>
+                    <span>Obese</span>
+                </div>
+                <div class="bmi-result-box">
+                    <i class='bx bxs-check-circle'></i> Your BMI: {{ data.bmi | default:'--' }} 
+                    ({% if data.bmi < 18.5 %}Underweight{% elif data.bmi < 25 %}Normal{% elif data.bmi < 30 %}Overweight{% else %}Obese{% endif %})
+                </div>
+            </div>
+        </div>
+        <!-- Weight Range Suggestion -->
+        <div class="card">
+            <div class="card-title"><i class='bx bx-target-lock' style="color: var(--color-success)"></i> Weight Range Suggestion</div>
+            
+            <div class="list-item" style="margin-top: 1rem;">
+                <div class="list-item-left">
+                    <div class="list-icon" style="background: var(--color-success-light); color: var(--color-success)">
+                        <i class='bx bx-line-chart'></i>
                     </div>
+                    <span class="list-text">Ideal Weight Range</span>
+                </div>
+                <span class="list-value text-green">{{ ideal_weight_range }} kg</span>
+            </div>
+            
+            <div class="list-item">
+                <div class="list-item-left">
+                    <div class="list-icon" style="background: var(--color-purple-light); color: var(--color-purple)">
+                        <i class='bx bx-crosshair'></i>
+                    </div>
+                    <span class="list-text">Healthy Weight Goal</span>
+                </div>
+                <span class="list-value text-purple">{{ healthy_weight_goal }} kg</span>
+            </div>
+        </div>
+        <!-- Water Intake Card -->
+        <div class="card">
+            <div class="card-title"><i class='bx bxs-droplet' style="color: var(--color-primary)"></i> Water Intake</div>
+            <div class="water-bar-container">
+                <div class="water-text">
+                    {{ water_intake | default:'--' }} <span style="font-size: 1.2rem; font-weight: 500;">Liters</span>
+                </div>
+                <div class="water-bar">
+                    <div class="water-fill" id="waterBarFill" style="width: 0%;"></div>
+                </div>
+                <div class="water-footer">
+                    <span>Daily Goal: 4L</span>
+                    <span id="waterPercentageText">0%</span>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- Personalized Diet Plan -->
-    <div class="results-header" style="margin-top: 4rem;">
-        <h2 style="color: #F59E0B; display: inline-block; border-bottom: 3px solid var(--secondary); padding-bottom: 0.5rem;">Your Personalized Diet Plan</h2>
-    </div>
-
-    <div class="diet-plan-grid">
-        <div class="meal-card" style="border-top: 4px solid #F59E0B;">
-            <div class="meal-title">☀️ Breakfast</div>
-            <ul class="meal-list">
-                {% for item in diet_plan.Breakfast %}
-                <li>• {{ item }}</li>
-                {% endfor %}
-            </ul>
+    <!-- Row 3 -->
+    <!-- Diet Recommendation -->  
+    <div class="grid-row-3">
+        <div class="card">
+            <div class="card-title"><i class='bx bx-leaf' style="color: var(--color-success)"></i> Diet Recommendation</div>
+            <div style="overflow-y: auto; max-height: 320px; padding-right: 0.5rem;">
+                {% if diet_plan.Tips %}
+                    {% for item in diet_plan.Tips %}
+                    <div class="list-item">
+                        <div class="list-item-left">
+                            <div class="list-icon" style="background: var(--color-warning-light); color: var(--color-warning)">
+                                <i class='bx bx-food-menu'></i>
+                            </div>
+                            <div>
+                                <div class="list-text">{{ item }}</div>
+-                            </div>
+                        </div>
+                        <i class='bx bx-chevron-right' style="color: var(--border-color)"></i>
+                    </div>
+                    {% endfor %}
+                {% else %}
+                    <div class="list-item">
+                        <div class="list-item-left">
+                            <div class="list-icon" style="background: #fee2e2; color: #ef4444;"><i class='bx bxs-bowl-hot'></i></div>
+                            <div><div class="list-text">High Protein Foods</div><div class="list-subtext">--</div></div>
+                        </div>
+                        <i class='bx bx-chevron-right' style="color: var(--border-color)"></i>
+                    </div>
+                    <div class="list-item">
+                        <div class="list-item-left">
+                            <div class="list-icon" style="background: #dcfce7; color: #22c55e;"><i class='bx bxs-leaf'></i></div>
+                            <div><div class="list-text">Fresh Vegetables</div><div class="list-subtext">--</div></div>
+                        </div>
+                        <i class='bx bx-chevron-right' style="color: var(--border-color)"></i>
+                    </div>
+                    <div class="list-item">
+                        <div class="list-item-left">
+                            <div class="list-icon" style="background: #ffedd5; color: #f97316;"><i class='bx bx-baguette'></i></div>
+                            <div><div class="list-text">Whole Grains</div><div class="list-subtext">--</div></div>
+                        </div>
+                        <i class='bx bx-chevron-right' style="color: var(--border-color)"></i>
+                    </div>
+                    <div class="list-item">
+                        <div class="list-item-left">
+                            <div class="list-icon" style="background: #dbeafe; color: #3b82f6;"><i class='bx bx-block'></i></div>
+                            <div><div class="list-text">Low Sugar Intake</div><div class="list-subtext">--</div></div>
+                        </div>
+                        <i class='bx bx-chevron-right' style="color: var(--border-color)"></i>
+                    </div>
+                {% endif %}
+            </div>
         </div>
-        <div class="meal-card" style="border-top: 4px solid #F59E0B;">
-            <div class="meal-title">🌤️ Lunch</div>
-            <ul class="meal-list">
-                {% for item in diet_plan.Lunch %}
-                <li>• {{ item }}</li>
-                {% endfor %}
-            </ul>
+        <!-- Meal Plan Card -->
+        <div class="card">
+            <div class="card-title"><i class='bx bx-restaurant' style="color: var(--color-success)"></i> Meal Plan (Today)</div>
+            <div style="overflow-y: auto; max-height: 320px; padding-right: 0.5rem;">
+                <div class="list-item">
+                    <div class="list-item-left">
+                        <div class="list-icon" style="background: var(--color-warning-light); color: var(--color-warning)"><i class='bx bx-sun'></i></div>
+                        <div>
+                            <div class="list-text">Breakfast</div>
+                            <div class="list-subtext">{% if diet_plan.Breakfast %}{{ diet_plan.Breakfast.0|truncatechars:20 }}{% else %}--{% endif %}</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="list-item">
+                    <div class="list-item-left">
+                        <div class="list-icon" style="background: var(--color-primary-light); color: var(--color-primary)"><i class='bx bxs-sun'></i></div>
+                        <div>
+                            <div class="list-text">Lunch</div>
+                            <div class="list-subtext">{% if diet_plan.Lunch %}{{ diet_plan.Lunch.0|truncatechars:20 }}{% else %}--{% endif %}</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="list-item">
+                    <div class="list-item-left">
+                        <div class="list-icon" style="background: var(--color-purple-light); color: var(--color-purple)"><i class='bx bx-cookie'></i></div>
+                        <div>
+                            <div class="list-text">Snack</div>
+                            <div class="list-subtext">Healthy Choice</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="list-item">
+                    <div class="list-item-left">
+                        <div class="list-icon" style="background: var(--color-danger-light); color: var(--color-danger)"><i class='bx bx-moon'></i></div>
+                        <div>
+                            <div class="list-text">Dinner</div>
+                            <div class="list-subtext">{% if diet_plan.Dinner %}{{ diet_plan.Dinner.0|truncatechars:20 }}{% else %}--{% endif %}</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
-        <div class="meal-card" style="border-top: 4px solid #4F46E5;">
-            <div class="meal-title">🌙 Dinner</div>
-            <ul class="meal-list">
-                {% for item in diet_plan.Dinner %}
-                <li>• {{ item }}</li>
-                {% endfor %}
-            </ul>
+        <!-- Nutrition Distribution Card -->
+        <div class="card">
+            <div class="card-title"><i class='bx bx-pie-chart-alt-2' style="color: var(--color-purple)"></i> Nutrition Distribution</div>
+            <div class="chart-container">
+                <canvas id="macroDonutChart"></canvas>
+                <div class="chart-center-text">
+                    <span class="chart-center-value">{{ data.calories | default:'--' }}</span>
+                    <span class="chart-center-label">kcal/day</span>
+                </div>
+            </div>
+            <div class="chart-legend">
+                <div class="legend-item">
+                    <div><span class="legend-color" style="background: #8b5cf6;"></span> Protein</div>
+                    <div>
+                        <span style="font-weight:600; margin-right: 0.5rem;">{{ protein_pct }}%</span>
+                        <span style="color: var(--text-secondary)">({{ data.protein | default:'--' }}g)</span>
+                    </div>
+                </div>
+                <div class="legend-item">
+                    <div><span class="legend-color" style="background: #3b82f6;"></span> Carbs</div>
+                    <div>
+                        <span style="font-weight:600; margin-right: 0.5rem;">{{ carbs_pct }}%</span>
+                        <span style="color: var(--text-secondary)">({{ data.carbs | default:'--' }}g)</span>
+                    </div>
+                </div>
+                <div class="legend-item">
+                    <div><span class="legend-color" style="background: #f97316;"></span> Fats</div>
+                    <div>
+                        <span style="font-weight:600; margin-right: 0.5rem;">{{ fat_pct }}%</span>
+                        <span style="color: var(--text-secondary)">({{ data.fat | default:'--' }}g)</span>
+                    </div>
+                </div>
+            </div>
         </div>
-        <div class="meal-card" style="border-top: 4px solid var(--secondary);">
-            <div class="meal-title">💡 Additional Tips</div>
-            <ul class="meal-list">
-                {% for item in diet_plan.Tips %}
-                <li>• {{ item }}</li>
-                {% endfor %}
-            </ul>
+        <!-- Workout Plan Card -->
+        <div class="card">
+            <div class="card-title"><i class='bx bx-dumbbell' style="color: var(--color-warning)"></i> Workout Plan</div>
+            <div style="overflow-y: auto; max-height: 320px; padding-right: 0.5rem;">
+                <div class="list-item">
+                    <div class="list-item-left">
+                        <div class="list-icon" style="background: var(--color-primary-light); color: var(--color-primary)"><i class='bx bx-run'></i></div>
+                        <span class="list-text">Brisk Walking</span>
+                    </div>
+                    <span class="list-value">{{ workout_plan.brisk_walking }} min</span>
+                </div>
+                <div class="list-item">
+                    <div class="list-item-left">
+                        <div class="list-icon" style="background: var(--color-danger-light); color: var(--color-danger)"><i class='bx bx-heart-circle'></i></div>
+                        <span class="list-text">Cardio (HIIT)</span>
+                    </div>
+                    <span class="list-value">{{ workout_plan.cardio }} min</span>
+                </div>
+                <div class="list-item">
+                    <div class="list-item-left">
+                        <div class="list-icon" style="background: var(--color-warning-light); color: var(--color-warning)"><i class='bx bx-dumbbell'></i></div>
+                        <span class="list-text">Strength Training</span>
+                    </div>
+                    <span class="list-value">{{ workout_plan.strength }} min</span>
+                </div>
+                <div class="list-item">
+                    <div class="list-item-left">
+                        <div class="list-icon" style="background: var(--color-purple-light); color: var(--color-purple)"><i class='bx bx-body'></i></div>
+                        <span class="list-text">Stretching</span>
+                    </div>
+                    <span class="list-value">{{ workout_plan.stretching }} min</span>
+                </div>
+                <div class="list-item">
+                    <div class="list-item-left">
+                        <div class="list-icon" style="background: var(--color-success-light); color: var(--color-success)"><i class='bx bx-leaf'></i></div>
+                        <span class="list-text">Meditation</span>
+                    </div>
+                    <span class="list-value">{{ workout_plan.meditation }} min</span>
+                </div>
+            </div>
         </div>
     </div>
 </div>
@@ -100,73 +310,77 @@
 {% block scripts %}
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
-    const protein = {{ data.protein }};
-    const carbs = {{ data.carbs }};
-    const fat = {{ data.fat }};
-    
-    // Pie Chart
-    const ctxPie = document.getElementById('macroPieChart').getContext('2d');
-    new Chart(ctxPie, {
-        type: 'doughnut',
-        data: {
-            labels: ['Protein', 'Carbs', 'Fat'],
-            datasets: [{
-                data: [protein * 4, carbs * 4, fat * 9], // calories from macros
-                backgroundColor: ['#EF4444', '#F59E0B', '#8B5CF6'],
-                borderWidth: 0
-            }]
-        },
-        options: {
-            responsive: true,
-            plugins: {
-                legend: { position: 'bottom' }
+    document.addEventListener('DOMContentLoaded', function() {
+        // Position BMI Indicator
+        const bmi = parseFloat("{{ data.bmi | default:'0' }}");
+        if (bmi > 0) {
+            const indicator = document.getElementById('bmiIndicator');
+            let percentage = 0;
+            
+            // Map BMI to percentage across the 4 segments (0-18.5, 18.5-25, 25-30, 30+)
+            if (bmi < 18.5) {
+                percentage = (bmi / 18.5) * 25;
+            } else if (bmi < 25) {
+                percentage = 25 + ((bmi - 18.5) / 6.5) * 25;
+            } else if (bmi < 30) {
+                percentage = 50 + ((bmi - 25) / 5) * 25;
+            } else {
+                percentage = 75 + Math.min(((bmi - 30) / 10), 1) * 25;
             }
+            
+            // Add a small timeout for animation effect
+            setTimeout(() => {
+                indicator.style.left = percentage + '%';
+            }, 300);
         }
-    });
 
-    // Bar Chart
-    const ctxBar = document.getElementById('macroBarChart').getContext('2d');
-    new Chart(ctxBar, {
-        type: 'bar',
-        data: {
-            labels: ['Protein', 'Carbs', 'Fat'],
-            datasets: [{
-                label: 'Grams',
-                data: [protein, carbs, fat],
-                backgroundColor: ['#EF4444', '#F59E0B', '#8B5CF6'],
-                borderRadius: 4
-            }]
-        },
-        options: {
-            responsive: true,
-            plugins: {
-                legend: { display: false }
-            },
-            scales: {
-                y: { beginAtZero: true }
-            }
+        // Water Bar
+        const waterIntake = parseFloat("{{ water_intake|default:'0' }}");
+        const maxWater = 4; // 4 Liters goal
+        if (waterIntake >= 0) {
+            const waterPercent = Math.min(Math.round((waterIntake / maxWater) * 100), 100);
+            setTimeout(() => {
+                document.getElementById('waterBarFill').style.width = waterPercent + '%';
+                document.getElementById('waterPercentageText').innerText = waterPercent + '%';
+            }, 300);
         }
-    });
 
-    // Water Chart
-    const waterIntake = {{ water_intake|default:0 }};
-    const ctxWater = document.getElementById('waterChart').getContext('2d');
-    new Chart(ctxWater, {
-        type: 'doughnut',
-        data: {
-            labels: ['Intake', 'Remaining'],
-            datasets: [{
-                data: [waterIntake, Math.max(4 - waterIntake, 0)],
-                backgroundColor: ['#3B82F6', '#E5E7EB'],
-                borderWidth: 0
-            }]
-        },
-        options: {
-            responsive: true,
-            plugins: {
-                legend: { display: false }
-            },
-            cutout: '75%'
+        // Nutrition Donut Chart
+        const protein = {{ data.protein | default:0 }};
+        const carbs = {{ data.carbs | default:0 }};
+        const fat = {{ data.fat | default:0 }};
+        
+        if(protein > 0 || carbs > 0 || fat > 0) {
+            const ctx = document.getElementById('macroDonutChart').getContext('2d');
+            new Chart(ctx, {
+                type: 'doughnut',
+                data: {
+                    labels: ['Protein', 'Carbs', 'Fats'],
+                    datasets: [{
+                        data: [protein, carbs, fat],
+                        backgroundColor: ['#8b5cf6', '#3b82f6', '#f97316'],
+                        borderWidth: 0,
+                        hoverOffset: 4
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    cutout: '75%',
+                    plugins: {
+                        legend: {
+                            display: false
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    return context.label + ': ' + context.raw + 'g';
+                                }
+                            }
+                        }
+                    }
+                }
+            });
         }
     });
 </script>

@@ -293,3 +293,60 @@ body {
         display: none; /* simple mobile approach */
     }
 }
+
+/* Water Circle Progress */
+.progress-circle {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 1.5rem;
+    margin-bottom: 1rem;
+}
+
+.progress-circle svg {
+    transform: rotate(-90deg);
+    filter: drop-shadow(0 4px 6px rgba(79, 70, 229, 0.2));
+}
+
+.progress-circle circle {
+    fill: none;
+    stroke-width: 18;
+    stroke-linecap: round;
+}
+
+.progress-circle circle.bg {
+    stroke: rgba(79, 70, 229, 0.1);
+}
+
+.progress-circle circle.progress {
+    stroke: url(#waterGradient);
+    transition: stroke-dashoffset 1.5s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.progress-text {
+    position: absolute;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.progress-text span:first-child {
+    font-size: 2.8rem;
+    font-weight: 800;
+    background: linear-gradient(135deg, var(--primary), #8B5CF6);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    color: var(--primary);
+    line-height: 1.1;
+    letter-spacing: -1px;
+}
+
+.progress-text span:last-child {
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--text-muted);
+}
+

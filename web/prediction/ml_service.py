@@ -90,7 +90,8 @@ def predict_health_metrics(data):
             'FAF': faf_map.get(activity_level, 0),
             'TUE': 1,
             'CALC': 2, # 'Sometimes'
-            'MTRANS': 3 # 'Public_Transportation'
+            'MTRANS': 3, # 'Public_Transportation'
+            'BMI': bmi
         }]
         
         df = pd.DataFrame(features)
@@ -102,11 +103,11 @@ def predict_health_metrics(data):
         label_map = {
             0: "Insufficient Weight",
             1: "Normal Weight",
-            2: "Overweight Level I",
-            3: "Overweight Level II",
-            4: "Obesity Type I",
-            5: "Obesity Type II",
-            6: "Obesity Type III"
+            2: "Obesity Type I",
+            3: "Obesity Type II",
+            4: "Obesity Type III",
+            5: "Overweight Level I",
+            6: "Overweight Level II"
         }
         
         risk = label_map.get(pred_idx, "Unknown")
