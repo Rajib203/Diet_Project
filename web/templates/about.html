@@ -1,0 +1,191 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}
+About Us | Diet & Nutrition Recommendation System
+{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/about.css' %}">
+{% endblock %}
+
+{% block content %}
+<!-- ABOUT US -->
+<section class="about-section">
+  <div class="container">
+    <div class="about-grid">
+      <div>
+        <div class="eyebrow">About Us</div>
+        <div class="divider"></div>
+        <h3>Personalized Diet & Nutrition Recommendation System</h3>
+        <p>Our system uses Machine Learning algorithms to analyze your health and lifestyle factors and provides personalized diet and nutrition recommendations to help you achieve your fitness goals and maintain a healthy lifestyle.</p>
+        <div class="about-badges">
+          <div class="badge"><span class="icon-circle">&#127919;</span> Personalized Recommendations</div>
+          <div class="badge"><span class="icon-circle">&#10003;</span> Accurate & Reliable</div>
+          <div class="badge"><span class="icon-circle">&#9201;</span> Fast & Efficient</div>
+        </div>
+      </div>
+      <div class="about-image">
+        <img src="{% static 'img/about.png' %}"
+        alt="Healthy lifestyle imagery"
+        class="img-fluid"
+        style="border-radius: 8px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);">
+      </div>
+    </div>
+
+    <h2 class="section-title mission-title">Our Mission</h2>
+    <div class="mission-grid">
+      <div class="card">
+        <div class="card-inner-row">
+          <div class="icon-badge">&#127919;</div>
+          <div>
+            <p>Our mission is to empower individuals to make better health and nutrition choices by leveraging the power of machine learning and data science. We aim to provide accurate, personalized, and easy-to-follow diet plans that promote a healthier and happier life.</p>
+          </div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-inner-row">
+          <div class="icon-badge">&#128065;</div>
+          <div>
+            <h4>Our Vision</h4>
+            <p>To become a trusted platform that transforms the way people approach their diet and nutrition through intelligent technology.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <h2 class="section-title">Key Features</h2>
+    <div class="features-grid">
+      <div class="feature-card">
+        <div class="icon-badge">&#128100;</div>
+        <h5>User Friendly Interface</h5>
+        <p>Simple and intuitive interface for a seamless user experience.</p>
+      </div>
+      <div class="feature-card">
+        <div class="icon-badge">&#129504;</div>
+        <h5>ML Based Predictions</h5>
+        <p>Advanced machine learning models ensure accurate predictions.</p>
+      </div>
+      <div class="feature-card">
+        <div class="icon-badge">&#128203;</div>
+        <h5>Personalized Diet Plans</h5>
+        <p>Customized diet plans based on your unique health profile.</p>
+      </div>
+      <div class="feature-card">
+        <div class="icon-badge">&#127822;</div>
+        <h5>Nutrition Analysis</h5>
+        <p>Detailed breakdown of macronutrients and calorie requirements.</p>
+      </div>
+      <div class="feature-card">
+        <div class="icon-badge">&#128200;</div>
+        <h5>Track Progress</h5>
+        <p>Monitor your progress and make better health decisions.</p>
+      </div>
+      <div class="feature-card">
+        <div class="icon-badge">&#128737;</div>
+        <h5>Data Privacy</h5>
+        <p>Your data is secure and never shared with third parties.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- WHY CHOOSE -->
+<section class="why-section">
+  <div class="container">
+    <h2 class="section-title">Why Choose Our System?</h2>
+    <div class="why-grid">
+      <div class="why-card">
+        <div class="icon-badge">&#129504;</div>
+        <h5>Machine Learning Based</h5>
+        <p>Advanced ML models ensure accurate predictions.</p>
+      </div>
+      <div class="why-card">
+        <div class="icon-badge">&#127919;</div>
+        <h5>Accurate Prediction</h5>
+        <p>High accuracy for BMI, calorie and nutrition prediction.</p>
+      </div>
+      <div class="why-card">
+        <div class="icon-badge">&#128100;</div>
+        <h5>Personalized Recommendation</h5>
+        <p>Customized diet and meal plan just for you.</p>
+      </div>
+      <div class="why-card">
+        <div class="icon-badge">&#128077;</div>
+        <h5>Easy to Use</h5>
+        <p>Simple, clean and user friendly interface.</p>
+      </div>
+      <div class="why-card">
+        <div class="icon-badge">&#9889;</div>
+        <h5>Fast Results</h5>
+        <p>Get instant results and recommendations in seconds.</p>
+      </div>
+      <div class="why-card">
+        <div class="icon-badge">&#128241;</div>
+        <h5>Responsive Design</h5>
+        <p>Works perfectly on all devices and screen sizes.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TECH STACK -->
+<section class="tech-section">
+  <div class="container">
+    <h2 class="section-title">Technology Stack</h2>
+    <div class="tech-logos">
+      <div class="tech-item py">
+        <span class="dot">Py</span>
+        <span>Python</span>
+      </div>
+      <div class="tech-item dj">
+        <span class="dot">Dj</span>
+        <span>Django</span>
+      </div>
+      <div class="tech-item ml">
+        <span class="dot">ML</span>
+        <span>Machine Learning</span>
+      </div>
+      <div class="tech-item html5">
+        <span class="dot">5</span>
+        <span>HTML5</span>
+      </div>
+      <div class="tech-item css3">
+        <span class="dot">3</span>
+        <span>CSS3</span>
+      </div>
+      <div class="tech-item sqlite">
+        <span class="dot">DB</span>
+        <span>SQLite</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- WHO CAN BENEFIT -->
+<section class="benefit-section">
+  <div class="container benefit-grid">
+    <div class="benefit-list">
+      <h3>Who Can Benefit?</h3>
+      <ul>
+        <li><span class="check-icon">&#10003;</span> People looking to lose or gain weight</li>
+        <li><span class="check-icon">&#10003;</span> Individuals with specific health conditions</li>
+        <li><span class="check-icon">&#10003;</span> Athletes and fitness enthusiasts</li>
+        <li><span class="check-icon">&#10003;</span> People who want a balanced lifestyle</li>
+        <li><span class="check-icon">&#10003;</span> Anyone who wants to eat healthy</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- CTA BANNER -->
+  <div class="container cta-banner">
+    <div class="cta-inner">
+      <div class="cta-text">
+        <h3>Start your journey towards a healthy you!</h3>
+        <p>Get personalized diet recommendations just for you.</p>
+      </div>
+      <a href="{% url 'prediction' %}" class="btn-white" style="text-decoration: none;">Start Prediction &#8594;</a>
+    </div>
+  </div>
+</section>
+{% endblock %}

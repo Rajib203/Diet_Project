@@ -5,11 +5,10 @@ class PredictionForm(forms.ModelForm):
     class Meta:
         model = HealthData
         fields = [
-            'name', 'age', 'gender', 'height', 'weight', 
+            'age', 'gender', 'height', 'weight', 
             'activity_level', 'goal', 'medical_condition'
         ]
         widgets = {
-            'name': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'John Doe'}),
             'age': forms.NumberInput(attrs={'class': 'form-control', 'placeholder': '25'}),
             'gender': forms.Select(attrs={'class': 'form-select'}),
             'height': forms.NumberInput(attrs={'class': 'form-control', 'placeholder': '175'}),

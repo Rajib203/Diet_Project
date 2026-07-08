@@ -1,41 +1,224 @@
 {% extends 'base.html' %}
+{% load static %}
+
+{% block title %}
+Prediction History Dashboard | Diet & Nutrition System
+{% endblock %}
 
 {% block content %}
-<div class="container" style="padding-top: 3rem;">
-    <h2 style="color: var(--primary); margin-bottom: 2rem;">Your Dashboard</h2>
-    
-    <div class="card">
-        <h3>History</h3>
-        {% if history %}
-            <table style="width: 100%; text-align: left; border-collapse: collapse; margin-top: 1rem;">
-                <thead>
-                    <tr style="border-bottom: 2px solid #E5E7EB;">
-                        <th style="padding: 1rem;">Date</th>
-                        <th style="padding: 1rem;">Goal</th>
-                        <th style="padding: 1rem;">BMI</th>
-                        <th style="padding: 1rem;">Calories</th>
-                        <th style="padding: 1rem;">Action</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for item in history %}
-                    <tr style="border-bottom: 1px solid #E5E7EB;">
-                        <td style="padding: 1rem;">{{ item.created_at|date:"M d, Y" }}</td>
-                        <td style="padding: 1rem;">{{ item.goal }}</td>
-                        <td style="padding: 1rem;">{{ item.bmi }}</td>
-                        <td style="padding: 1rem;">{{ item.calories }}</td>
-                        <td style="padding: 1rem; display: flex; gap: 0.5rem;">
-                            <a href="{% url 'inputs' item.pk %}" class="btn btn-secondary" style="padding: 0.25rem 0.75rem; font-size: 0.875rem;">Inputs</a>
-                            <a href="{% url 'result' item.pk %}" class="btn btn-primary" style="padding: 0.25rem 0.75rem; font-size: 0.875rem;">Results</a>
-                            <a href="{% url 'delete_prediction' item.pk %}" class="btn btn-secondary" style="padding: 0.25rem 0.75rem; font-size: 0.875rem; border-color: var(--danger); color: var(--danger);" onclick="return confirm('Are you sure you want to delete this record?');">Delete</a>
-                        </td>
-                    </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
-        {% else %}
-            <p style="color: var(--text-muted); margin-top: 1rem;">No history found. <a href="{% url 'prediction' %}" style="color: var(--primary);">Get your first prediction!</a></p>
-        {% endif %}
+<style>
+  .dashboard-container {
+    max-width: 1140px;
+    margin: 40px auto;
+    padding: 0 24px;
+    font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  }
+  .dashboard-card {
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
+    border-radius: 18px;
+    padding: 32px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.02);
+  }
+  .dashboard-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 24px;
+    border-bottom: 1px solid #f1f5f9;
+    padding-bottom: 16px;
+  }
+  .dashboard-header h1 {
+    font-size: 26px;
+    font-weight: 800;
+    color: #101a2b;
+    margin: 0;
+  }
+  .dashboard-header p {
+    color: #6b7280;
+    font-size: 14.5px;
+    margin: 4px 0 0;
+  }
+  .table-responsive {
+    overflow-x: auto;
+  }
+  .history-table {
+    width: 100%;
+    border-collapse: collapse;
+    text-align: left;
+  }
+  .history-table th {
+    background: #f8fafc;
+    color: #4b5563;
+    font-weight: 700;
+    font-size: 13.5px;
+    padding: 14px 16px;
+    border-bottom: 2px solid #e2e8f0;
+  }
+  .history-table td {
+    padding: 16px;
+    border-bottom: 1px solid #e2e8f0;
+    font-size: 14px;
+    color: #1f2937;
+  }
+  .history-table tr:hover td {
+    background: #fafbfc;
+  }
+  .badge-goal {
+    display: inline-block;
+    padding: 4px 8px;
+    border-radius: 6px;
+    font-size: 12px;
+    font-weight: 600;
+  }
+  .badge-loss { background: #e0f2fe; color: #0369a1; }
+  .badge-gain { background: #fef3c7; color: #b45309; }
+  .badge-maintain { background: #f0fdf4; color: #15803d; }
+  
+  .badge-risk {
+    display: inline-block;
+    padding: 4px 8px;
+    border-radius: 6px;
+    font-size: 12px;
+    font-weight: 600;
+  }
+  .risk-normal { background: #d1fae5; color: #065f46; }
+  .risk-warning { background: #fef3c7; color: #92400e; }
+  .risk-danger { background: #fee2e2; color: #991b1b; }
+  
+  .action-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: 6px 12px;
+    border-radius: 8px;
+    font-size: 13px;
+    font-weight: 600;
+    text-decoration: none;
+    transition: all 0.2s;
+  }
+  .btn-view {
+    background: #1f8a44;
+    color: #fff;
+  }
+  .btn-view:hover {
+    background: #166b34;
+  }
+  .btn-inputs {
+    background: #f3f4f6;
+    color: #4b5563;
+    border: 1px solid #d1d5db;
+  }
+  .btn-inputs:hover {
+    background: #e5e7eb;
+  }
+  .btn-delete {
+    background: #fee2e2;
+    color: #b91c1c;
+  }
+  .btn-delete:hover {
+    background: #fecaca;
+  }
+  .empty-state {
+    text-align: center;
+    padding: 48px 0;
+  }
+  .empty-state-icon {
+    font-size: 48px;
+    margin-bottom: 16px;
+  }
+  .empty-state h3 {
+    margin: 0 0 8px;
+    font-size: 18px;
+    color: #111827;
+  }
+  .empty-state p {
+    color: #6b7280;
+    font-size: 14px;
+    margin: 0 0 20px;
+  }
+  .empty-state .btn-primary {
+    display: inline-flex;
+    background: #009639;
+    color: #fff;
+    padding: 10px 20px;
+    border-radius: 8px;
+    text-decoration: none;
+    font-weight: 600;
+  }
+</style>
+
+<div class="dashboard-container">
+  <div class="dashboard-card">
+    <div class="dashboard-header">
+      <div>
+        <h1>📊 History Dashboard</h1>
+        <p>Manage and view your saved diet & nutrition recommendations</p>
+      </div>
+      <div>
+        <a href="{% url 'prediction' %}" class="action-btn btn-view" style="padding: 10px 20px;">➕ New Prediction</a>
+      </div>
     </div>
+    
+    <div class="table-responsive">
+      {% if history %}
+      <table class="history-table">
+        <thead>
+          <tr>
+            <th>Date</th>
+            <th>Name</th>
+            <th>Age</th>
+            <th>Goal</th>
+            <th>BMI</th>
+            <th>Calories</th>
+            <th>Disease Risk</th>
+            <th style="text-align: right;">Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for item in history %}
+          <tr>
+            <td>{{ item.created_at|date:"M d, Y h:i A" }}</td>
+            <td><strong>{{ item.name }}</strong></td>
+            <td>{{ item.age }} yrs</td>
+            <td>
+              {% if item.goal == 'Weight Loss' %}
+                <span class="badge-goal badge-loss">📉 Weight Loss</span>
+              {% elif item.goal == 'Weight Gain' %}
+                <span class="badge-goal badge-gain">📈 Weight Gain</span>
+              {% else %}
+                <span class="badge-goal badge-maintain">⚖️ Maintenance</span>
+              {% endif %}
+            </td>
+            <td><strong>{{ item.bmi|default:"--" }}</strong></td>
+            <td>{{ item.calories|default:"--" }} kcal</td>
+            <td>
+              {% if item.disease_risk == 'Normal Weight' %}
+                <span class="badge-risk risk-normal">🟢 {{ item.disease_risk }}</span>
+              {% elif 'Obesity' in item.disease_risk %}
+                <span class="badge-risk risk-danger">🔴 {{ item.disease_risk }}</span>
+              {% else %}
+                <span class="badge-risk risk-warning">🟡 {{ item.disease_risk }}</span>
+              {% endif %}
+            </td>
+            <td style="text-align: right; white-space: nowrap;">
+              <a href="{% url 'result' item.pk %}" class="action-btn btn-view">👁️ View Plan</a>
+              <a href="{% url 'inputs' item.pk %}" class="action-btn btn-inputs">📋 Inputs</a>
+              <a href="{% url 'delete_prediction' item.pk %}" class="action-btn btn-delete" onclick="return confirm('Are you sure you want to delete this prediction?');">🗑️ Delete</a>
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+      {% else %}
+      <div class="empty-state">
+        <div class="empty-state-icon">📊</div>
+        <h3>No Predictions Yet</h3>
+        <p>You haven't submitted any prediction inputs yet. Let's create your first custom diet plan!</p>
+        <a href="{% url 'prediction' %}" class="btn-primary">Get Started →</a>
+      </div>
+      {% endif %}
+    </div>
+  </div>
 </div>
 {% endblock %}

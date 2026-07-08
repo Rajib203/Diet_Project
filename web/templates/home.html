@@ -1,19 +1,102 @@
 {% extends 'base.html' %}
 {% load static %}
 
+{% block title %}
+Personalized Diet & Nutrition Recommendation System
+{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/home.css' %}">
+{% endblock %}
+<div class="container"></div>
+
 {% block content %}
+<!-- HERO SECTION -->
 <section class="hero">
-    <div class="hero-content">
-        <h1>Diet & Nutrition<br>Recommendation System</h1>
-        <p>Get personalized diet and nutrition recommendations based on your health data using Machine Learning.</p>
-        <div>
-            <a href="{% url 'prediction' %}" class="btn btn-primary" style="margin-right: 1rem;">Get Prediction</a>
-            <a href="{% url 'dashboard' %}" class="btn btn-secondary">View Dashboard</a>
-        </div>
+  <div class="hero-inner">
+    <div class="hero-text">
+      <h1>Personalized<span class="accent">Diet &amp; Nutrition</span>Recommendation System</h1>
+      <p>Get a personalized diet plan and nutrition recommendation based on your health and lifestyle using Machine Learning.</p>
+      <div class="hero-actions">
+        <a href="{% url 'prediction' %}" class="hero-btn primary">🍃 Get Started</a>
+        <a href="{% url 'about' %}" class="hero-btn secondary"><span style="color: #2f6fed; font-weight: bold; font-size: 18px; margin-right: 4px;">+</span> Learn More</a>
+      </div>
     </div>
-    <div class="hero-image">
-        <!-- Using a placeholder related to health/food -->
-        <img src="https://images.unsplash.com/photo-1490645935967-10de6ba17061?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="Healthy Food Bowl">
+    <div class="hero-art">
+      <div class="hero-image">
+        <img src="{% static 'img/home.png' %}"
+          alt="Diet & Nutrition illustration"
+          class="img-fluid"
+          loading="lazy">
+      </div>
+    </div>
+  </div>
+</section>
+
+<!--MODEL ANALYSIS-->
+<section class="analysis-section">
+    <div class="container">
+
+        <div class="section-title">
+            <h2>📊 Model Analysis & Insights</h2>
+            <p>Explore key insights and performance metrics of our machine learning models.</p>
+        </div>
+
+        <div class="analysis-grid">
+
+            <div class="card">
+                <h3>1. Model Accuracy Comparison</h3>
+                <img src="{% static 'img/model_accuracy.png' %}" alt="Model Accuracy Comparison">
+            </div>
+
+            <div class="card">
+                <h3>2. Feature Importance - Random Forest</h3>
+                <img src="{% static 'img/feature_importance.png' %}" alt="Feature Importance - Random Forest">
+            </div>
+
+            <div class="card">
+                <h3>3. BMI Distribution</h3>
+                <img src="{% static 'img/bmi_distribution.png' %}" alt="BMI Distribution">
+            </div>
+
+            <div class="card">
+                <h3>4. Daily Calories Analysis</h3>
+                <img src="{% static 'img/calories_chart.png' %}" alt="Daily Calories Analysis">
+            </div>
+
+            <div class="card">
+                <h3>5. Prediction Category Distribution</h3>
+                <img src="{% static 'img/prediction_chart.png' %}" alt="Prediction Category Distribution">
+            </div>
+
+            <div class="card">
+                <h3>6. Confusion Matrix Heatmap</h3>
+                <img src="{% static 'img/confusion_matrix_heatmap.png' %}" alt="Confusion Matrix Heatmap">
+            </div>
+
+            <div class="card wide-card">
+                <h3>7. Correlation Heatmap</h3>
+                <img src="{% static 'img/correlation_heatmap.png' %}" alt="Correlation Heatmap">
+            </div>
+
+        </div>
+
     </div>
 </section>
+
+<!-- CTA BANNER -->
+<div class="cta-wrap">
+  <a href="{% url 'prediction' %}" class="cta-banner" style="text-decoration: none; display: flex;">
+    <div class="cta-center">
+      <h2>Ready to improve your health?</h2>
+      <p>Start your journey towards a healthier you today!</p>
+    </div>
+    <div class="cta-icon">
+      <svg class="heart-icon" viewBox="0 0 100 90" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M50 82C50 82 12 58 12 32C12 18 22 10 33 10C41 10 47 15 50 21C53 15 59 10 67 10C78 10 88 18 88 32C88 58 50 82 50 82Z" stroke="white" stroke-width="4" stroke-linejoin="round"/>
+        <polyline points="20,45 35,45 42,32 50,58 57,40 63,45 80,45" stroke="white" stroke-width="4" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    </div>
+  </a>
+</div>
 {% endblock %}

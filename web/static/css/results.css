@@ -1,0 +1,321 @@
+  :root{
+    --bg: #eef1f6;
+    --card-bg: #ffffff;
+    --border: #e4e7ee;
+    --text-dark: #1c2230;
+    --text-muted: #8b93a3;
+    --green: #22a55e;
+    --green-dark: #1c8a4d;
+    --blue: #2f6fed;
+    --orange: #f6821f;
+    --red-soft: #fdeceb;
+    --red-text: #e0483e;
+    --yellow-soft: #fdf3e0;
+    --purple: #6c4fbf;
+    font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  }
+
+  *{ box-sizing: border-box; }
+
+  body{
+    margin:0;
+    background: var(--bg);
+    color: var(--text-dark);
+  }
+
+  main {
+    padding: 40px 24px;
+    display: block;
+  }
+
+  .page{
+    max-width: 1140px;
+    margin: 0 auto;
+    background: #f7f8fb;
+    border-radius: 20px;
+    padding: 28px 32px 32px;
+    box-shadow: 0 1px 3px rgba(20,20,40,0.04);
+  }
+
+  /* Header */
+  .header{
+    display:flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 22px;
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+  .header h1{
+    margin: 0 0 4px;
+    font-size: 26px;
+    font-weight: 700;
+  }
+  .header p{
+    margin:0;
+    color: var(--text-muted);
+    font-size: 14px;
+  }
+  .header-actions{
+    display:flex;
+    gap: 10px;
+  }
+  .btn{
+    display:flex;
+    align-items:center;
+    gap:8px;
+    border-radius: 10px;
+    padding: 10px 18px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    border: 1px solid var(--border);
+    background: #fff;
+    color: var(--text-dark);
+  }
+  .btn.primary{
+    background: var(--green);
+    border-color: var(--green);
+    color: #fff;
+  }
+
+  /* Generic card */
+  .card{
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 18px;
+  }
+
+  /* Top stats row */
+  .stats-row{
+    display:grid;
+    grid-template-columns: repeat(6, 1fr);
+    gap: 14px;
+    margin-bottom: 16px;
+  }
+  .stat-card{
+    display:flex;
+    flex-direction:column;
+    justify-content: space-between;
+    min-height: 108px;
+  }
+  .stat-top{
+    display:flex;
+    justify-content: space-between;
+    align-items:flex-start;
+  }
+  .stat-label{
+    font-size: 13px;
+    color: #4b5563;
+    font-weight: 600;
+  }
+  .stat-icon{
+    font-size: 20px;
+    line-height:1;
+  }
+  .stat-value{
+    font-size: 22px;
+    font-weight: 700;
+    color: var(--text-dark);
+    margin-top: 10px;
+  }
+  .stat-unit{
+    font-size: 12px;
+    color: var(--text-muted);
+    margin-top: 2px;
+  }
+  .stat-goal{
+    font-size: 11px;
+    color: var(--blue);
+    font-weight: 600;
+    margin-top: 2px;
+  }
+
+  /* Middle row: diet type / foods / meal plan */
+  .mid-row{
+    display:grid;
+    grid-template-columns: 1.1fr 1.6fr 1.1fr;
+    gap: 14px;
+    margin-bottom: 16px;
+  }
+
+  .section-title{
+    display:flex;
+    align-items:center;
+    gap:8px;
+    font-size: 15px;
+    font-weight: 700;
+    margin-bottom: 14px;
+  }
+  .section-title.green{ color: var(--green-dark); }
+  .section-title.teal{ color: #0f8a8a; }
+  .section-title.purple{ color: var(--purple); }
+  .section-title.red{ color: var(--red-text); }
+
+  /* Diet type card */
+  .diet-type-name{
+    color: var(--green-dark);
+    font-weight: 700;
+    font-size: 15px;
+    margin-bottom: 8px;
+  }
+  .diet-type-desc{
+    font-size: 13px;
+    color: var(--text-muted);
+    line-height: 1.5;
+    margin-bottom: 12px;
+  }
+  .bowl-illustration{
+    text-align:center;
+    font-size: 64px;
+    line-height: 1;
+  }
+
+  /* Recommended foods grid */
+  .foods-grid{
+    display:grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 10px;
+  }
+  .food-item{
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 14px 8px;
+    text-align:center;
+    background:#fff;
+  }
+  .food-emoji{
+    font-size: 28px;
+    margin-bottom: 8px;
+  }
+  .food-name{
+    font-size: 12.5px;
+    font-weight: 600;
+    color: var(--text-dark);
+  }
+
+  /* Meal plan card */
+  .meal-item{
+    display:flex;
+    align-items:flex-start;
+    gap: 10px;
+    margin-bottom: 16px;
+  }
+  .meal-item:last-child{ margin-bottom: 0; }
+  .meal-emoji{
+    font-size: 18px;
+    margin-top: 1px;
+  }
+  .meal-info{ flex:1; }
+  .meal-name{
+    font-size: 13.5px;
+    font-weight: 700;
+    color: var(--text-dark);
+    display:flex;
+    align-items:center;
+    gap: 4px;
+  }
+  .meal-name .req{
+    color: var(--red-text);
+    font-size: 14px;
+  }
+  .meal-detail{
+    font-size: 13px;
+    color: var(--text-muted);
+    margin-top: 2px;
+  }
+
+  /* Bottom row: lifestyle / confidence */
+  .bottom-row{
+    display:grid;
+    grid-template-columns: 2.2fr 1fr;
+    gap: 14px;
+    margin-bottom: 16px;
+  }
+
+  .lifestyle-card{
+    background: var(--yellow-soft);
+    border: 1px solid #f4e3bd;
+  }
+  .lifestyle-grid{
+    display:grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 10px;
+  }
+  .lifestyle-item{
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    text-align:center;
+    gap: 8px;
+  }
+  .lifestyle-emoji{ font-size: 26px; }
+  .lifestyle-value{
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--text-dark);
+  }
+  .lifestyle-label{
+    font-size: 12px;
+    color: var(--text-muted);
+  }
+
+  .confidence-card{
+    background: var(--red-soft);
+    border: 1px solid #f6d4d1;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    text-align:center;
+  }
+  .confidence-icon{
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    background:#fff;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size: 26px;
+    color: var(--green);
+    margin-bottom: 10px;
+    border: 1px solid #e3e7ee;
+  }
+  .confidence-value{
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--red-text);
+  }
+  .confidence-label{
+    font-size: 12px;
+    color: var(--text-muted);
+    margin-top: 2px;
+  }
+
+  /* Footer note */
+  .note{
+    display:flex;
+    align-items:flex-start;
+    gap: 10px;
+    background: #eaf1ff;
+    border: 1px solid #d3e2fb;
+    border-radius: 12px;
+    padding: 14px 16px;
+    font-size: 13px;
+    color: #2c4a7c;
+  }
+  .note b{ font-size: 15px; }
+
+  @media (max-width: 900px){
+    .stats-row{ grid-template-columns: repeat(3, 1fr); }
+    .mid-row{ grid-template-columns: 1fr; }
+    .bottom-row{ grid-template-columns: 1fr; }
+    .foods-grid{ grid-template-columns: repeat(4, 1fr); }
+  }
+  @media (max-width: 560px){
+    .stats-row{ grid-template-columns: repeat(2, 1fr); }
+    .foods-grid{ grid-template-columns: repeat(2, 1fr); }
+    .lifestyle-grid{ grid-template-columns: repeat(2, 1fr); }
+  }

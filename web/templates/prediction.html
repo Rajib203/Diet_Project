@@ -1,65 +1,222 @@
 {% extends 'base.html' %}
+{% load static %}
+
+{% block title %}
+Diet & Nutrition Prediction | Diet & Nutrition Recommendation System
+{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/prediction.css' %}">
+{% endblock %}
+<div class="container"></div>
 
 {% block content %}
-<div class="container" style="padding-top: 4rem;">
-    <div class="card" style="max-width: 800px; margin: 0 auto;">
-        <h2 style="text-align: center; color: var(--secondary); margin-bottom: 2rem;">Enter Your Health Information</h2>
-        
-        <form method="POST">
-            {% csrf_token %}
-            {% if form.errors %}
-                <div style="color: red; margin-bottom: 1rem; text-align: center;">
-                    {{ form.errors }}
-                </div>
-            {% endif %}
-            <div class="form-row">
-                <div class="form-group">
-                    <label class="form-label" for="{{ form.name.id_for_label }}">Name</label>
-                    {{ form.name }}
-                </div>
-                <div class="form-group">
-                    <label class="form-label" for="{{ form.age.id_for_label }}">Age</label>
-                    {{ form.age }}
-                </div>
-            </div>
-            
-            <div class="form-row">
-                <div class="form-group">
-                    <label class="form-label" for="{{ form.height.id_for_label }}">Height (cm)</label>
-                    {{ form.height }}
-                </div>
-                <div class="form-group">
-                    <label class="form-label" for="{{ form.weight.id_for_label }}">Weight (kg)</label>
-                    {{ form.weight }}
-                </div>
-            </div>
-            
-            <div class="form-row">
-                <div class="form-group">
-                    <label class="form-label" for="{{ form.gender.id_for_label }}">Gender</label>
-                    {{ form.gender }}
-                </div>
-                <div class="form-group">
-                    <label class="form-label" for="{{ form.activity_level.id_for_label }}">Activity Level</label>
-                    {{ form.activity_level }}
-                </div>
-            </div>
+<div class="page">
 
-            <div class="form-row">
-                <div class="form-group">
-                    <label class="form-label" for="{{ form.goal.id_for_label }}">Goal</label>
-                    {{ form.goal }}
-                </div>
-                <div class="form-group">
-                    <label class="form-label" for="{{ form.medical_condition.id_for_label }}">Medical Condition</label>
-                    {{ form.medical_condition }}
-                </div>
-            </div>
-            
-            <div style="text-align: center; margin-top: 2rem;">
-                <button type="submit" class="btn btn-primary" style="background-color: var(--secondary); width: 100%; max-width: 300px; font-size: 1.1rem; padding: 0.75rem;">Predict My Results</button>
-            </div>
-        </form>
+  <div class="header">
+    <div>
+      <h1>Prediction Input</h1>
+      <p>Enter your details below to get your personalized diet &amp; nutrition recommendation</p>
     </div>
+    <div class="header-art"></div>
+  </div>
+  <div class="prediction-image">
+        <img src="{% static 'img/prediction.png' %}"
+          alt="Diet & Nutrition"
+          class="img-fluid">
+    </div>
+
+  <form method="POST" action="{% url 'prediction' %}">
+    {% csrf_token %}
+    
+    {% if form.errors %}
+    <div class="error-container" style="background-color: rgba(239, 68, 68, 0.1); border-left: 4px solid #ef4444; padding: 15px; border-radius: 8px; margin-bottom: 20px; font-family: sans-serif; color: #b91c1c;">
+      <h3 style="margin: 0 0 10px 0; font-size: 16px; font-weight: 600;">⚠️ Please correct the following errors:</h3>
+      <ul style="margin: 0; padding-left: 20px; font-size: 14px; line-height: 1.5;">
+        {% for field, errors in form.errors.items %}
+          {% for error in errors %}
+            <li><strong>{{ field|title }}</strong>: {{ error }}</li>
+          {% endfor %}
+        {% endfor %}
+      </ul>
+    </div>
+    {% endif %}
+    
+    <div class="main-card">
+
+      <div class="section-title blue">👤 Personal Information</div>
+      <div class="personal-grid">
+        <div class="field-group">
+          <label>Full Name <span class="req">*</span></label>
+          <div class="field-input">
+            <input type="text" name="name" placeholder="e.g. John Doe" required>
+            <span class="icon">📝</span>
+          </div>
+        </div>
+        <div class="field-group">
+          <label>Age (Years) <span class="req">*</span></label>
+          <div class="field-input">
+            <input type="number" name="age" placeholder="e.g. 22" min="1" max="120" required>
+            <span class="icon">📅</span>
+          </div>
+        </div>
+        <div class="field-group">
+          <label for="gender">Gender <span class="req">*</span></label>
+          <div class="field-input select-wrap">
+            <span class="icon">👤</span>
+            <select id="gender" name="gender" required>
+              <option value="" disabled selected>Select Gender</option>
+              <option value="Male">Male</option>
+              <option value="Female">Female</option>
+              <option value="Other">Other</option>
+            </select>
+            <span class="chevron">▾</span>
+          </div>
+        </div>
+        <div class="field-group">
+          <label for="height">Height (cm) <span class="req">*</span></label>
+          <div class="field-input">
+            <input type="number" step="any" name="height" placeholder="e.g. 170" min="50" max="250" required>
+            <span class="icon">✏️</span>
+          </div>
+        </div>
+        <div class="field-group">
+          <label for="weight">Weight (kg) <span class="req">*</span></label>
+          <div class="field-input">
+            <input type="number" step="any" name="weight" placeholder="e.g. 65" min="20" max="300" required>
+            <span class="icon">⚖️</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="panels-grid">
+        <div class="panel lifestyle">
+          <div class="section-title green">🌿 Lifestyle Information</div>
+          <div class="panel-fields">
+            <div>
+              <label for="activity_level">Activity Level <span class="req">*</span></label>
+              <div class="field-input select-wrap">
+                <span class="icon">🏃</span>
+                <select id="activity_level" name="activity_level" required>
+                  <option value="" disabled selected>Select Activity Level</option>
+                  <option value="Sedentary">Sedentary</option>
+                  <option value="Lightly Active">Lightly Active</option>
+                  <option value="Moderate">Moderate</option>
+                  <option value="Very Active">Very Active</option>
+                  <option value="Extra Active">Extra Active</option>
+                </select>
+                <span class="chevron">▾</span>
+              </div>
+            </div>
+            <div>
+              <label for="sleep_duration">Sleep Duration (hours) <span class="req">*</span></label>
+              <div class="field-input select-wrap">
+                <span class="icon">🛏️</span>
+                <select id="sleep_duration" name="sleep_duration" required>
+                  <option value="" disabled selected>Select Sleep Duration</option>
+                  <option value="4">&lt; 5 hours</option>
+                  <option value="6">5–6 hours</option>
+                  <option value="8">7–8 hours</option>
+                  <option value="9">&gt; 8 hours</option>
+                </select>
+                <span class="chevron">▾</span>
+              </div>
+            </div>
+            <div>
+              <label for="exercise">Exercise Frequency <span class="req">*</span></label>
+              <div class="field-input select-wrap">
+                <span class="icon">🏋️</span>
+                <select id="exercise" name="exercise" required>
+                  <option value="" disabled selected>Select Frequency</option>
+                  <option value="Never">Never</option>
+                  <option value="1-2 Days / Week">1-2 times/week</option>
+                  <option value="3-4 Days / Week">3-4 times/week</option>
+                  <option value="5+ Days / Week">5+ times/week</option>
+                </select>
+                <span class="chevron">▾</span>
+              </div>
+            </div>
+            <div>
+              <label for="daily_steps">Daily Steps</label>
+              <div class="field-input">
+                <span class="icon">👟</span>
+                <input type="number" name="daily_steps" id="daily_steps" placeholder="e.g. 8000" min="0">
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="panel health">
+          <div class="section-title purple">💜 Health Information</div>
+          <div class="panel-fields single">
+            <div>
+              <label for="medical_condition">Medical Condition</label>
+              <div class="field-input select-wrap">
+                <span class="icon">🩺</span>
+                <select name="medical_condition" id="medical_condition">
+                  <option value="None">None</option>
+                  <option value="Diabetes">Diabetes</option>
+                  <option value="Hypertension">Hypertension</option>
+                  <option value="PCOS">PCOS</option>
+                  <option value="Thyroid">Thyroid</option>
+                </select>
+                <span class="chevron">▾</span>
+              </div>
+            </div>
+            <div>
+              <label for="food_allergy">Food Allergies (if any)</label>
+              <div class="field-input">
+                <span class="icon">⚠️</span>
+                <input type="text" name="food_allergy" id="food_allergy" placeholder="e.g. Nuts, Gluten">
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="panel goal">
+          <div class="section-title orange">🎯 Goal &amp; Preference</div>
+          <div class="panel-fields single">
+            <div>
+              <label for="goal">Fitness Goal <span class="req">*</span></label>
+              <div class="field-input select-wrap">
+                <span class="icon">🎯</span>
+                <select name="goal" id="goal" required>
+                  <option value="Weight Loss">Weight Loss</option>
+                  <option value="Maintenance">Maintenance</option>
+                  <option value="Weight Gain">Weight Gain</option>
+                </select>
+                <span class="chevron">▾</span>
+              </div>
+            </div>
+            <div>
+              <label for="food_preference">Food Preference <span class="req">*</span></label>
+              <div class="field-input select-wrap">
+                <span class="icon">🍴</span>
+                <select name="food_preference" id="food_preference" required>
+                  <option value="" disabled selected>Select Preference</option>
+                  <option value="Vegetarian">Vegetarian</option>
+                  <option value="Non-Vegetarian">Non-Vegetarian</option>
+                  <option value="Vegan">Vegan</option>
+                </select>
+                <span class="chevron">▾</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="info-bar">
+        <span>ℹ️</span>
+        <span>Please provide accurate information for better recommendations.</span>
+      </div>
+
+      <div class="form-actions">
+        <button type="submit" class="submit-btn">📋 Predict My Diet Plan →</button>
+        <button type="reset" class="reset-btn">🔄 Reset</button>
+      </div>
+
+    </div>
+  </form>
+
 </div>
 {% endblock %}
