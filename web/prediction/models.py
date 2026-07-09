@@ -52,7 +52,7 @@ class HealthData(models.Model):
 
 
     user = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True)
-    name = models.CharField(max_length=100)
+   
     age = models.IntegerField()
     gender = models.CharField(max_length=10, choices=GENDER_CHOICES)
     height = models.FloatField(help_text="Height in cm")
@@ -83,4 +83,4 @@ class HealthData(models.Model):
     prediction_confidence = models.FloatField(null=True, blank=True, help_text="Confidence level of the predictions (0 to 100)%")
 
     def __str__(self):
-        return f"{self.name}'s Health Data - {self.created_at.strftime('%Y-%m-%d')}"
+        return f"Health Data - {self.created_at.strftime('%Y-%m-%d')}"

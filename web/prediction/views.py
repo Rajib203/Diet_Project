@@ -41,7 +41,6 @@ def prediction_view(request):
             
             # Assign user and name
             health_data.user = request.user if request.user.is_authenticated else None
-            health_data.name = "Guest" if not request.user.is_authenticated else (request.user.get_full_name() or request.user.username)
             
             health_data.save()
             
@@ -273,7 +272,7 @@ def api_predict(request):
             # Save prediction to DB
             real_hd = HealthData.objects.create(
                 user=request.user if request.user.is_authenticated else None,
-                name="Guest" if not request.user.is_authenticated else request.user.username,
+               
                 age=data.get('age'),
                 gender=data.get('sex', 'Male'),
                 height=data.get('height'),

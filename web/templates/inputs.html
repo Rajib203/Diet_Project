@@ -129,13 +129,7 @@ Submitted Inputs Details | Diet & Nutrition System
     </div>
     
     <div class="inputs-grid">
-      <div class="input-item">
-        <div class="input-icon">👤</div>
-        <div class="input-info">
-          <span class="input-label">User Name</span>
-          <span class="input-val">{{ data.name }}</span>
-        </div>
-      </div>
+      
       
       <div class="input-item">
         <div class="input-icon">📅</div>
@@ -178,6 +172,38 @@ Submitted Inputs Details | Diet & Nutrition System
       </div>
       
       <div class="input-item">
+        <div class="input-icon">🌙</div>
+        <div class="input-info">
+          <span class="input-label">Sleep Duration</span>
+          <span class="input-val">{{ data.sleep_duration }}</span>
+        </div>
+      </div>
+
+      <div class="input-item">
+        <div class="input-icon">🏋️</div>
+        <div class="input-info">
+          <span class="input-label">Exercise Frequency</span>
+          <span class="input-val">{{ data.exercise_frequency }}</span>
+        </div>
+      </div>
+
+      <div class="input-item">
+        <div class="input-icon">👟</div>
+        <div class="input-info">
+          <span class="input-label">Daily Steps</span>
+          <span class="input-val">{{ data.daily_steps }}</span>
+        </div>
+      </div>
+
+      <div class="input-item">
+        <div class="input-icon">🩺</div>
+        <div class="input-info">
+          <span class="input-label">Medical Condition</span>
+          <span class="input-val">{{ data.medical_condition }}</span>
+        </div>
+      </div>
+
+      <div class="input-item">
         <div class="input-icon">🎯</div>
         <div class="input-info">
           <span class="input-label">Goal</span>
@@ -186,17 +212,17 @@ Submitted Inputs Details | Diet & Nutrition System
       </div>
       
       <div class="input-item">
-        <div class="input-icon">🩺</div>
+        <div class="input-icon">🍴</div>
         <div class="input-info">
-          <span class="input-label">Medical Condition</span>
-          <span class="input-val">{{ data.medical_condition }}</span>
+          <span class="input-label">Food preferences</span>
+          <span class="input-val">{{ data.food_preferences }}</span>
         </div>
       </div>
     </div>
     
     <div class="action-buttons">
       <a href="{% url 'history' %}" class="btn btn-back">⬅️ Back to History</a>
-      <a href="{% url 'result' data.pk %}" class="btn btn-view">👁️ View Diet Plan →</a>
+      <a href="{% url 'result' data.pk %}" class="btn btn-view"> View Diet Plan →</a>
     </div>
   </div>
 </div>
