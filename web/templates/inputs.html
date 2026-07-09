@@ -11,7 +11,7 @@ Submitted Inputs Details | Diet & Nutrition System
     max-width: 800px;
     margin: 40px auto;
     padding: 0 24px;
-    font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+    font-family: 'Adobe Clean',sans-serif;
   }
   .inputs-card {
     background: #ffffff;
@@ -124,7 +124,7 @@ Submitted Inputs Details | Diet & Nutrition System
     <div class="inputs-header">
       <div>
         <h1>📋 Submitted Inputs</h1>
-        <p>Details for prediction record submitted on {{ data.created_at|date:"M d, Y h:i A" }}</p>
+        <p>Details for prediction record submitted on <span class="local-datetime" data-datetime="{{ data.created_at|date:'c' }}"></span></p>
       </div>
     </div>
     
@@ -195,7 +195,7 @@ Submitted Inputs Details | Diet & Nutrition System
     </div>
     
     <div class="action-buttons">
-      <a href="{% url 'dashboard' %}" class="btn btn-back">⬅️ Back to Dashboard</a>
+      <a href="{% url 'history' %}" class="btn btn-back">⬅️ Back to History</a>
       <a href="{% url 'result' data.pk %}" class="btn btn-view">👁️ View Diet Plan →</a>
     </div>
   </div>

@@ -5,6 +5,15 @@ from .forms import PredictionForm
 from .models import HealthData
 from .ml_service import predict_health_metrics
 from nutrition.services import get_diet_plan, get_workout_plan
+from django.utils import timezone
+
+
+# To convert UTC datetime to Local datetime (in India)
+def get_local_datetime(dt):
+   local_time = timezone.localtime(dt.created_at)
+   local_time = local_time.strftime("%d/%m/%Y %H:%M:%S %Z")    
+   return local_time
+
 
 def home(request):
     return render(request, 'home.html')
@@ -28,6 +37,7 @@ def prediction_view(request):
             health_data.carbs = predictions['carbs']
             health_data.fat = predictions['fat']
             health_data.disease_risk = predictions['disease_risk']
+            health_data.prediction_confidence = predictions['prediction_confidence']
             
             # Assign user and name
             health_data.user = request.user if request.user.is_authenticated else None
@@ -36,7 +46,7 @@ def prediction_view(request):
             health_data.save()
             
             # Save non-model inputs to session for rendering on result page
-            request.session['food_preference'] = request.POST.get('food_preference', 'Non-Vegetarian')
+            request.session['food_preference'] = request.POST.get('food_preferences', 'Non-Vegetarian')
             request.session['daily_steps'] = request.POST.get('daily_steps', '8000')
             request.session['sleep_duration'] = request.POST.get('sleep_duration', '8')
             
@@ -90,8 +100,8 @@ def result_view(request, pk):
     workout_plan = get_workout_plan(data)
     
     # Get values from session for UI items not in DB (or default them)
-    diet_type = request.session.get('food_preference', 'Non-Vegetarian')
-    daily_steps = request.session.get('daily_steps', '8000')
+    diet_type = request.session.get('food_preference', 'choices')
+    daily_steps = request.session.get('daily_steps', '1000')
     sleep_duration_val = request.session.get('sleep_duration', '8')
     
     # Format sleep hours
@@ -160,14 +170,14 @@ def result_view(request, pk):
         'dinner': dinner,
         'daily_steps': daily_steps,
         'sleep_hours': sleep_hours,
-        'confidence_score': 94
+        'prediction_confidence': data.prediction_confidence
     }
     return render(request, 'result.html', context)
 
-def dashboard_view(request):
+def history_view(request):
     history = HealthData.objects.all().order_by('-created_at')
     
-    return render(request, 'dashboard.html', {'history': history})
+    return render(request, 'history.html', {'history': history})
 
 def delete_prediction(request, pk):
     try:
@@ -175,13 +185,13 @@ def delete_prediction(request, pk):
         data.delete()
     except HealthData.DoesNotExist:
         pass
-    return redirect('dashboard')
+    return redirect('history')
 
 def inputs_view(request, pk):
     try:
         data = HealthData.objects.get(pk=pk)
     except HealthData.DoesNotExist:
-        return redirect('dashboard')
+        return redirect('history')
     
     return render(request, 'inputs.html', {'data': data})
 
@@ -276,7 +286,8 @@ def api_predict(request):
                 protein=predictions['protein'],
                 carbs=predictions['carbs'],
                 fat=predictions['fat'],
-                disease_risk=predictions['disease_risk']
+                disease_risk=predictions['disease_risk'],
+                prediction_confidence=predictions['prediction_confidence'],
             )
 
             diet_plan = get_diet_plan(real_hd)
@@ -311,6 +322,7 @@ def api_predict(request):
                 'target_calories': real_hd.calories,
                 'bmi': bmi,
                 'model_accuracy': 94,
+                'prediction_confidence': real_hd.prediction_confidence,
                 'bmi_category': bmi_category,
                 'obesity_prediction': real_hd.disease_risk,
                 'protein_g': real_hd.protein,

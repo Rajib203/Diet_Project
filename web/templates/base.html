@@ -40,6 +40,26 @@
     <!-- Footer -->
     {% include 'footer.html' %}
 
+    <script>
+      document.addEventListener('DOMContentLoaded', function() {
+        const elements = document.querySelectorAll('[data-datetime]');
+        if (!elements.length) return;
+
+        const formatter = new Intl.DateTimeFormat(undefined, {
+          dateStyle: 'medium',
+          timeStyle: 'short'
+        });
+
+        elements.forEach(function(el) {
+          const value = el.dataset.datetime;
+          if (!value) return;
+          const date = new Date(value);
+          if (Number.isNaN(date.getTime())) return;
+          el.textContent = formatter.format(date);
+          el.title = date.toLocaleString(undefined, { timeZoneName: 'short' });
+        });
+      });
+    </script>
 </body>
 
 </html>

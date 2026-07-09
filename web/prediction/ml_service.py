@@ -99,6 +99,9 @@ def predict_health_metrics(data):
         # Scale and Predict
         X_scaled = scaler.transform(df)
         pred_idx = rf_model.predict(X_scaled)[0]
+
+        probabilities = rf_model.predict_proba(X_scaled)[0]
+        confidence = round(max(probabilities) * 100, 2)
         
         label_map = {
             0: "Insufficient Weight",
@@ -128,5 +131,6 @@ def predict_health_metrics(data):
         'protein': protein,
         'carbs': carbs,
         'fat': fat,
-        'disease_risk': risk
+        'disease_risk': risk,
+        'prediction_confidence': confidence
     }

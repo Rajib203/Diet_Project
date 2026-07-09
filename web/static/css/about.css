@@ -12,7 +12,7 @@
 }
 *{margin:0;padding:0;box-sizing:border-box;}
 body{
-  font-family:'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  font-family:'Adobe Clean',sans-serif;
   color:var(--text-dark);
   background:#f4f6f9;
   line-height:1.5;

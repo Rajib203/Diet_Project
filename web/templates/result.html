@@ -2,181 +2,320 @@
 {% load static %}
 
 {% block title %}
-Your Personalized Diet Recommendation | Diet & Nutrition System
+Your Health Prediction Results - Diet & Nutrition System
 {% endblock %}
 
 {% block extra_css %}
 <link rel="stylesheet" href="{% static 'css/results.css' %}">
+<style>
+  /* Reset body padding for navbar/footer layout */
+  body {
+    background: #f5f7fb !important;
+    padding: 0 !important;
+  }
+  .wrap {
+    max-width: 1520px;
+    margin: 40px auto 60px auto !important;
+    padding: 0 24px;
+  }
+  .info-row .value,
+  .confidence-box .value {
+    color: #1f2937 !important; /* Make text colors readable instead of light gray */
+  }
+  .metric-value {
+    color: #111827 !important;
+  }
+  .mini-pill {
+    color: #065f46 !important;
+    background: #d1fae5 !important;
+  }
+  .health-status-top.danger {
+    background: #fee2e2;
+  }
+  .health-status-top.warning {
+    background: #fef3c7;
+  }
+  .health-status-top.safe {
+    background: #e6f7ec;
+  }
+  .health-status-top .shield.danger {
+    background: #ef4444;
+  }
+  .health-status-top .shield.warning {
+    background: #f59e0b;
+  }
+  .health-status-top .shield.safe {
+    background: #1f9d55;
+  }
+  .health-status-top .dash.danger,
+  .pill.danger {
+    color: #991b1b;
+    background: #fee2e2;
+  }
+  .health-status-top .dash.warning,
+  .pill.warning {
+    color: #92400e;
+    background: #fef3c7;
+  }
+  .health-status-top .dash.safe,
+  .pill.safe {
+    color: #065f46;
+    background: #e6f7ec;
+  }
+  .pill.danger,
+  .pill.warning,
+  .pill.safe {
+    font-weight: 700;
+  }
+  .mini-pill.danger {
+    background: #fee2e2 !important;
+    color: #b91c1c !important;
+  }
+  .mini-pill.warning {
+    background: #fef3c7 !important;
+    color: #b45309 !important;
+  }
+  .mini-pill.safe {
+    background: #d1fae5 !important;
+    color: #047857 !important;
+  }
+  .check-list li {
+    color: #374151 !important;
+  }
+</style>
 {% endblock %}
-<div class="container"></div>
 
 {% block content %}
-<div class="page">
+<div class="wrap">
 
-  <div class="header">
-    <div>
-      <h1>Your Personalized Diet Recommendation</h1>
-      <p>Here is your detailed diet &amp; nutrition plan</p>
+  <!-- Top bar -->
+  <div class="topbar">
+    <div class="topbar-left">
+      <div class="check-circle">✓</div>
+      <div>
+        <h1>Your Health Prediction Results</h1>
+        <p>Here is your personalized health analysis and recommendations</p>
+      </div>
     </div>
-    <div class="header-actions">
-      <a href="{% url 'prediction' %}" class="btn" style="text-decoration: none;">🔄 Predict Again</a>
-      <button onclick="window.print()" class="btn primary">🖨️ Print / Save PDF</button>
+    <div class="topbar-actions">
+      <a href="{% url 'prediction' %}" class="tbtn tbtn-blue" style="text-decoration: none;">🔄 Predict Again</a>
+      <a href="{% url 'history' %}" class="tbtn tbtn-green" style="text-decoration: none;">⊞ View History</a>
+      <button class="tbtn tbtn-white" onclick="window.print();">Print Report</button>
     </div>
   </div>
 
-  <div class="stats-row">
-    <div class="card stat-card">
-      <div class="stat-top"><span class="stat-label">BMI</span></div>
-      <div class="stat-value">{{ bmi }}</div>
-      <div class="stat-unit">{{ bmi_category }}</div>
+  <!-- Row 1 -->
+  <div class="row1">
+    <div class="card">
+      <div class="card-title">
+        <div class="badge badge-blue">👤</div>
+        <h3>User Information</h3>
+      </div>
+      <div class="info-grid">
+        <div>
+          <div class="info-row"><span class="label">Name</span><span class="colon">:</span><span class="value">{{ data.name }}</span></div>
+          <div class="info-row"><span class="label">Age</span><span class="colon">:</span><span class="value">{{ data.age }} years</span></div>
+          <div class="info-row"><span class="label">Gender</span><span class="colon">:</span><span class="value">{{ data.gender }}</span></div>
+          <div class="info-row"><span class="label">Height</span><span class="colon">:</span><span class="value">{{ data.height|stringformat:".1f" }} cm</span></div>
+          <div class="info-row"><span class="label">Weight</span><span class="colon">:</span><span class="value">{{ data.weight|stringformat:".1f" }} kg</span></div>
+        </div>
+        <div>
+          <div class="info-row"><span class="label">Goal</span><span class="colon">:</span><span class="value">{{ data.goal }}</span></div>
+          <div class="info-row"><span class="label">Activity Level</span><span class="colon">:</span><span class="value">{{ data.activity_level }}</span></div>
+          <div class="info-row"><span class="label">Medical Condition</span><span class="colon">:</span><span class="value">{{ data.medical_condition }}</span></div>
+          <div class="info-row"><span class="label">Prediction Date</span><span class="colon">:</span><span class="value local-datetime" data-datetime="{{ data.created_at|date:'c' }}"></span></div>
+        </div>
+      </div>
     </div>
-    <div class="card stat-card">
-      <div class="stat-top"><span class="stat-label">Daily Calories</span><span class="stat-icon">🔥</span></div>
-      <div class="stat-value">{{ calories }}</div>
-      <div class="stat-unit">kcal</div>
+
+    <div class="card">
+      <div class="card-title">
+        <div class="badge badge-purple">🛡️</div>
+        <h3>Prediction Confidence</h3>
+      </div>
+      <div class="confidence-box">
+        <div class="confidence-icon">✓</div>
+        <div class="label">Model Confidence</div>
+        <div class="value" style="font-size: 22px; font-weight: 800;">{{ data.prediction_confidence|stringformat:".1f" }}%</div>
+      </div>
+      <div class="confidence-caption">ML Classifier accuracy confidence level</div>
     </div>
-    <div class="card stat-card">
-      <div class="stat-top"><span class="stat-label">Protein</span><span class="stat-icon">💪</span></div>
-      <div class="stat-value">{{ protein }}</div>
-      <div class="stat-unit">g</div>
-    </div>
-    <div class="card stat-card">
-      <div class="stat-top"><span class="stat-label">Carbohydrates</span><span class="stat-icon">🌾</span></div>
-      <div class="stat-value">{{ carbs }}</div>
-      <div class="stat-unit">g</div>
-    </div>
-    <div class="card stat-card">
-      <div class="stat-top"><span class="stat-label">Fats</span><span class="stat-icon">🥑</span></div>
-      <div class="stat-value">{{ fat }}</div>
-      <div class="stat-unit">g</div>
-    </div>
-    <div class="card stat-card">
-      <div class="stat-top"><span class="stat-label">Water</span><span class="stat-icon">💧</span></div>
-      <div class="stat-value">{{ water }}</div>
-      <div class="stat-unit">L</div>
-      <div class="stat-goal">Daily Goal</div>
+
+    <div class="card">
+      <div class="card-title">
+        <div class="badge badge-green">❤️</div>
+        <h3>Your Health Status</h3>
+      </div>
+      <div class="health-status-top {{ health_status_color }}">
+        <div class="shield {{ health_status_color }}">🛡️</div>
+        <div style="text-align:right">
+          <div class="dash {{ health_status_color }}" style="font-size: 20px; font-weight: 800;">{{ health_status }}</div>
+          <div style="color: #6b7280; font-size: 13px;">Health Status</div>
+        </div>
+      </div>
+      <div class="status-detail">
+        <span>Disease Risk</span>
+        <span class="pill {{ health_status_color }}">{{ data.disease_risk }}</span>
+      </div>
     </div>
   </div>
 
-  <div class="mid-row">
-    <div class="card">
-      <div class="section-title green">🌿 Diet Type</div>
-      <div class="diet-type-name">{{ diet_type }}</div>
-      <div class="diet-type-desc">A well-balanced diet with the right amount of nutrients for your goal.</div>
-      <div class="bowl-illustration"></div>
+  <!-- Row 2: metrics strip -->
+  <div class="row2">
+    <div class="card metric-card">
+      <div class="card-title" style="margin-bottom:8px;">
+        <div class="badge badge-green" style="width:34px;height:34px;font-size:15px;">⚡</div>
+        <h3 style="font-size:14px;">BMI</h3>
+      </div>
+      <div class="metric-value">{{ bmi|stringformat:".1f" }}</div>
+      <span class="mini-pill {{ health_status_color }}">{{ bmi_category }}</span>
     </div>
 
+    <div class="card metric-card">
+      <div class="card-title" style="margin-bottom:8px;">
+        <div class="badge" style="width:34px;height:34px;font-size:15px;background:#fdece0;">🔥</div>
+        <h3 style="font-size:14px;">Daily Calories</h3>
+      </div>
+      <div class="metric-value">{{ calories }} <span class="unit">kcal</span></div>
+      <div class="metric-sub sub-orange">Target Calorie Intake</div>
+    </div>
+
+    <div class="card metric-card">
+      <div class="card-title" style="margin-bottom:8px;">
+        <div class="badge badge-purple" style="width:34px;height:34px;font-size:15px;">🧍</div>
+        <h3 style="font-size:14px;">Protein</h3>
+      </div>
+      <div class="metric-value">{{ protein }} <span class="unit">gram</span></div>
+      <div class="metric-sub sub-purple">{{ protein_pct }}% of calories</div>
+    </div>
+
+    <div class="card metric-card">
+      <div class="card-title" style="margin-bottom:8px;">
+        <div class="badge" style="width:34px;height:34px;font-size:15px;background:#fef3c7;">🌾</div>
+        <h3 style="font-size:14px;">Carbohydrates</h3>
+      </div>
+      <div class="metric-value">{{ carbs }} <span class="unit">gram</span></div>
+      <div class="metric-sub sub-orange">{{ carbs_pct }}% of calories</div>
+    </div>
+
+    <div class="card metric-card">
+      <div class="card-title" style="margin-bottom:8px;">
+        <div class="badge" style="width:34px;height:34px;font-size:15px;background:#fde2e8;">🍳</div>
+        <h3 style="font-size:14px;">Fat</h3>
+      </div>
+      <div class="metric-value">{{ fat }} <span class="unit">gram</span></div>
+      <div class="metric-sub sub-red">{{ fat_pct }}% of calories</div>
+    </div>
+
+    <div class="card metric-card">
+      <div class="card-title" style="margin-bottom:8px;">
+        <div class="badge badge-blue" style="width:34px;height:34px;font-size:15px;">💧</div>
+        <h3 style="font-size:14px;">Water Intake</h3>
+      </div>
+      <div class="metric-value">{{ water|stringformat:".1f" }} <span class="unit">L</span></div>
+      <div class="metric-sub sub-blue">Daily Goal</div>
+    </div>
+  </div>
+
+  <!-- Row 3 -->
+  <div class="row3">
     <div class="card">
-      <div class="section-title teal">🍱 Recommended Foods</div>
-      <div class="foods-grid">
+      <div class="card-title">
+        <div class="badge badge-green">🥗</div>
+        <h3>Recommended Foods</h3>
+      </div>
+      <ul class="check-list">
         {% for food in recommended_foods %}
-        <div class="food-item">
-          <div class="food-emoji">
-            {% if "paneer" in food|lower or "cheese" in food|lower %}🧀
-            {% elif "egg" in food|lower %}🥚
-            {% elif "yogurt" in food|lower or "milk" in food|lower or "dairy" in food|lower %}🥛
-            {% elif "nut" in food|lower or "almond" in food|lower or "walnut" in food|lower or "seed" in food|lower %}🌰
-            {% elif "avocado" in food|lower %}🥑
-            {% elif "banana" in food|lower %}🍌
-            {% elif "honey" in food|lower %}🍯
-            {% elif "rice" in food|lower %}🍚
-            {% elif "dal" in food|lower or "lentil" in food|lower or "chickpea" in food|lower or "bean" in food|lower %}🥘
-            {% elif "roti" in food|lower or "bread" in food|lower or "toast" in food|lower or "tortilla" in food|lower or "wrap" in food|lower %}🍞
-            {% elif "chicken" in food|lower %}🍗
-            {% elif "turkey" in food|lower %}🦃
-            {% elif "salmon" in food|lower or "fish" in food|lower or "tuna" in food|lower %}🐟
-            {% elif "beef" in food|lower or "steak" in food|lower %}🥩
-            {% elif "spinach" in food|lower or "broccoli" in food|lower or "asparagus" in food|lower or "vegetable" in food|lower or "greens" in food|lower or "salad" in food|lower %}🥦
-            {% elif "fruit" in food|lower or "berry" in food|lower or "berries" in food|lower or "apple" in food|lower %}🍎
-            {% elif "tofu" in food|lower or "tempeh" in food|lower %}🍢
-            {% else %}
-            {% endif %}
-          </div>
-          <div class="food-name">{{ food }}</div>
-        </div>
+        <li><span class="tick">✓</span> {{ food }}</li>
         {% empty %}
-        <div style="grid-column: span 4; text-align: center; color: var(--text-muted); padding: 20px;">No recommendations available.</div>
+        <li><span class="tick">✓</span> Green Veggies</li>
+        <li><span class="tick">✓</span> Fresh Fruits</li>
+        <li><span class="tick">✓</span> Whole Grains</li>
         {% endfor %}
-      </div>
+      </ul>
+      <div class="foods-footer">Eat whole foods, lean protein, vegetables and healthy fats.</div>
     </div>
 
     <div class="card">
-      <div class="section-title purple">🍽️ Meal Plan</div>
-      <div class="meal-item">
-        <span class="meal-emoji">🌅</span>
-        <div class="meal-info">
-          <div class="meal-name">Breakfast</div>
-          <div class="meal-detail">{{ breakfast }}</div>
-        </div>
+      <div class="card-title">
+        <div class="badge" style="background:#fdece0;">📅</div>
+        <h3>Daily Meal Plan</h3>
       </div>
-      <div class="meal-item">
-        <span class="meal-emoji">☀️</span>
-        <div class="meal-info">
-          <div class="meal-name">Lunch</div>
-          <div class="meal-detail">{{ lunch }}</div>
-        </div>
+      <div class="meal-row"><span class="meal-tag">Breakfast</span><span>: {{ breakfast }}</span></div>
+      <div class="meal-row"><span class="meal-tag">Lunch</span><span>: {{ lunch }}</span></div>
+      <div class="meal-row"><span class="meal-tag">Snacks</span><span>: {{ snacks }}</span></div>
+      <div class="meal-row"><span class="meal-tag">Dinner</span><span>: {{ dinner }}</span></div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">
+        <div class="badge badge-green">🏋️</div>
+        <h3>Workout Plan</h3>
       </div>
-      <div class="meal-item">
-        <span class="meal-emoji">🌤️</span>
-        <div class="meal-info">
-          <div class="meal-name">Snacks</div>
-          <div class="meal-detail">{{ snacks }}</div>
-        </div>
+      <ul class="check-list">
+        {% if workout_plan.brisk_walking > 0 %}
+          <li><span class="tick">✓</span> <strong>Brisk Walking:</strong> {{ workout_plan.brisk_walking }} mins</li>
+        {% endif %}
+        {% if workout_plan.cardio > 0 %}
+          <li><span class="tick">✓</span> <strong>Cardio:</strong> {{ workout_plan.cardio }} mins</li>
+        {% endif %}
+        {% if workout_plan.strength > 0 %}
+          <li><span class="tick">✓</span> <strong>Strength:</strong> {{ workout_plan.strength }} mins</li>
+        {% endif %}
+        {% if workout_plan.stretching > 0 %}
+          <li><span class="tick">✓</span> <strong>Stretching:</strong> {{ workout_plan.stretching }} mins</li>
+        {% endif %}
+        {% if workout_plan.meditation > 0 %}
+          <li><span class="tick">✓</span> <strong>Meditation:</strong> {{ workout_plan.meditation }} mins</li>
+        {% endif %}
+      </ul>
+    </div>
+
+    <div class="card">
+      <div class="card-title">
+        <div class="badge badge-purple">💜</div>
+        <h3>Lifestyle Recommendations</h3>
       </div>
-      <div class="meal-item">
-        <span class="meal-emoji">🌙</span>
-        <div class="meal-info">
-          <div class="meal-name">Dinner</div>
-          <div class="meal-detail">{{ dinner }}</div>
-        </div>
+      <ul class="check-list">
+        {% for tip in diet_plan.Tips %}
+        <li><span class="tick">✓</span> {{ tip }}</li>
+        {% empty %}
+        <li><span class="tick">✓</span> Stay adequately hydrated</li>
+        <li><span class="tick">✓</span> Avoid processed sugary drinks</li>
+        {% endfor %}
+      </ul>
+    </div>
+
+    <div class="card">
+      <div class="card-title">
+        <div class="badge badge-blue">📏</div>
+        <h3>Healthy Weight</h3>
+      </div>
+      <div class="weight-block">
+        <div class="lbl">Ideal Weight Range</div>
+        <div class="val">{{ ideal_weight_range }} kg</div>
+        <div class="lbl">Healthy Weight Goal</div>
+        <div class="val">{{ healthy_weight_goal }} kg</div>
       </div>
     </div>
   </div>
 
-  <div class="bottom-row">
-    <div class="card lifestyle-card">
-      <div class="section-title green">🌿 Lifestyle Recommendations</div>
-      <div class="lifestyle-grid">
-        <div class="lifestyle-item">
-          <span class="lifestyle-emoji">👣</span>
-          <div style="font-size:12.5px;font-weight:600;color:var(--text-dark);">Daily Steps</div>
-          <div class="lifestyle-value">{{ daily_steps }}</div>
-          <div class="lifestyle-label">Steps</div>
-        </div>
-        <div class="lifestyle-item">
-          <span class="lifestyle-emoji">🛏️</span>
-          <div style="font-size:12.5px;font-weight:600;color:var(--text-dark);">Sleep</div>
-          <div class="lifestyle-value">{{ sleep_hours }}</div>
-        </div>
-        <div class="lifestyle-item">
-          <span class="lifestyle-emoji">🥛</span>
-          <div style="font-size:12.5px;font-weight:600;color:var(--text-dark);">Water Intake</div>
-          <div class="lifestyle-value">{{ water }}</div>
-          <div class="lifestyle-label">Liters</div>
-        </div>
-        <div class="lifestyle-item">
-          <span class="lifestyle-emoji">🏃</span>
-          <div style="font-size:12.5px;font-weight:600;color:var(--text-dark);">Exercise</div>
-          <div class="lifestyle-value">30 - 45</div>
-          <div class="lifestyle-label">min/day</div>
-        </div>
+  <!-- Summary -->
+  <div class="card summary-card">
+    <div class="summary-left">
+      <div class="summary-icon">📋</div>
+      <div>
+        <h3 style="margin:0 0 4px 0;font-size:16px;font-weight:700;">Calorie and Goal Summary</h3>
+        <div style="color: #4b5563; font-size: 14.5px;">Based on your age of {{ data.age }} and BMI of {{ bmi|stringformat:".1f" }} ({{ bmi_category }}), we recommend a target caloric intake of <strong>{{ calories }} kcal/day</strong> to support your goal: <strong>{{ data.goal }}</strong>.</div>
       </div>
     </div>
-
-    <div class="card confidence-card">
-      <div class="section-title red" style="margin-bottom:16px;">🛡️ Prediction Confidence</div>
-      <div class="confidence-icon">✅</div>
-      <div class="confidence-value">{{ confidence_score }}%</div>
-      <div class="confidence-label">Confidence</div>
-    </div>
+    
   </div>
 
-  <div class="note">
-    <span>⭐</span>
-    <div>
-      <b>Note:</b> This recommendation is generated by our machine learning model based on the information you provided.<br>
-      Always consult a healthcare professional before making any major changes to your diet.
-    </div>
+  <!-- Disclaimer -->
+  <div class="disclaimer" style="margin-top: 30px; margin-bottom: 20px;">
+    <span class="dot">i</span>
+    <span><strong>Disclaimer:</strong> This prediction is based on your information. Please consult a healthcare professional for any medical concerns.</span>
   </div>
 
 </div>
